@@ -1,0 +1,156 @@
+---
+title: "Mini Data Analysis - Milestone 1"
+author: "Hossein EbrahimiKondori"
+date: "10/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Preliminaries
+
+First, let's load the packages we want to work with.
+
+```{r}
+suppressPackageStartupMessages(library(datateachr))
+suppressPackageStartupMessages(library(tidyverse))
+```
+
+If you do not have [`datateachr`](https://github.com/UBC-MDS/datateachr) installed, run the following code in your **R terminal**.
+```
+install.packages("devtools")
+devtools::install_github("UBC-MDS/datateachr")
+```
+
+### Task1.1
+
+Top 4 personal appealing datasets:
+
+1. cancer_sample
+2. vancouver_trees
+3. building_permits
+4. apt_buildings
+
+### Task1.2
+First, to familiarize more with each dataset, we take look at class type, number of rows, number of columns, variables' name, and type of each variable for each dataset. These properties could be obtained by `class()`, `dim()` and `glimpse()` functions.
+
+#### Cancer sample dataset
+For this sepcific dataset, it is useful to see decription of variables availaibe at [`UCI Machine Learning Breast Cancer Wisconsin`](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Diagnostic%29). The summary is provided below:
+
+**Variables Information**:
+
+1. ID number
+2. Diagnosis (M = malignant, B = benign)
+
+Ten real-valued features are computed for each cell nucleus:
+
+a) radius (mean of distances from center to points on the perimeter)
+b) texture (standard deviation of gray-scale values)
+c) perimeter
+d) area
+e) smoothness (local variation in radius lengths)
+f) compactness (perimeter^2 / area - 1.0)
+g) concavity (severity of concave portions of the contour)
+h) concave points (number of concave portions of the contour)
+i) symmetry
+j) fractal dimension ("coastline approximation" - 1)
+
+
+```{r}
+# class format
+class(cancer_sample)
+```
+
+```{r}
+# dimension of dataset
+dim(cancer_sample)
+```
+
+```{r}
+# name and type of each variable
+glimpse(cancer_sample)
+```
+#### Vancouver trees dataset
+The general information about the dataset that is obtained from [`Vancouver Open Portal`](https://opendata.vancouver.ca/explore/dataset/street-trees/information/?disjunctive.species_name&disjunctive.common_name&disjunctive.height_range_id&dataChart=eyJxdWVyaWVzIjpbeyJjb25maWciOnsiZGF0YXNldCI6InN0cmVldC10cmVlcyIsIm9wdGlvbnMiOnsiZGlzanVuY3RpdmUuc3BlY2llc19uYW1lIjp0cnVlLCJkaXNqdW5jdGl2ZS5jb21tb25fbmFtZSI6dHJ1ZSwiZGlzanVuY3RpdmUuaGVpZ2h0X3JhbmdlX2lkIjp0cnVlfX0sImNoYXJ0cyI6W3siYWxpZ25Nb250aCI6dHJ1ZSwidHlwZSI6ImxpbmUiLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJoZWlnaHRfcmFuZ2VfaWQiLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiIjMDI3OUIxIn1dLCJ4QXhpcyI6ImRhdGVfcGxhbnRlZCIsIm1heHBvaW50cyI6IiIsInRpbWVzY2FsZSI6InllYXIiLCJzb3J0IjoiIn1dLCJkaXNwbGF5TGVnZW5kIjp0cnVlLCJhbGlnbk1vbnRoIjp0cnVlfQ%3D%3D).
+
+The street tree dataset includes a listing of public trees on boulevards in the City of Vancouver and provides data on tree coordinates, species and other related characteristics. Park trees and private trees are not included in the inventory.
+
+**Data currency**
+
+The dataset is updated on a weekly basis. However, tree attributes are generally not updated on a regular basis and it may be several years between updates for many of those attributes. Priorities and resources determine how fast a change in reality is reflected in the data.
+The coordinates were primarily provided by the 2016 Tree Inventory project.
+
+**Data accuracy**
+
+Tree attributes are generally not updated on a regular basis and it may be several years between updates for many of those attributes.
+
+The coordinates and/or addresses are incorrect for these Trees ID: **21616, 115677, 139140, 209663, 209664, 213592, 255944, 256303**
+
+**Note**: 0 value in latitude and longitude fields mean there is no related information available.
+```{r}
+# class format
+class(vancouver_trees)
+```
+
+```{r}
+# number of rows and columns
+dim(vancouver_trees)
+```
+
+```{r}
+# name and type of variables
+glimpse(vancouver_trees)
+```
+#### Building permits dataset
+The general information about the dataset that is obtained from [`Vancouver Open Portal`](https://opendata.vancouver.ca/explore/dataset/issued-building-permits/information/).
+
+Building permits are required for new buildings, additions or alterations to existing buildings, and for demolitions or salvage and abatement work.
+
+This dataset includes information of all building permits issued by the City of Vancouver, starting in 2017. The data is based on permit issuance date and does not show current status of a permit, or changes after a permit is originally issued.
+
+**Data currency**
+
+The extract for the current year is updated weekly but the extract for prior year is static.
+
+**Data accuracy**
+
+There may be some loss of quality from data entry errors and omissions, in particular where the original application date was prior to May 2016 (when permit software changed).
+```{r}
+# class format
+class(building_permits)
+```
+
+```{r}
+# rows and cols
+dim(building_permits)
+```
+
+```{r}
+# variables info
+glimpse(building_permits)
+```
+#### Apartment buildings
+
+The general information about the dataset that is obtained from [`Toronto Open Data`](https://opendata.vancouver.ca/explore/dataset/issued-building-permits/information/).
+
+The Apartment Building Standard (ABS) program is based on a new bylaw Chapter 354, which defines formal criteria to identify all rental apartment buildings in the city with 3 or more storeys and 10 or more units. The ABS program is part of RentSafeTO which is a multi-residential inspection program that establishes standards on how building owners operate their building(s) and communicate with their tenants, in addition to establishing a schedule for continuous building evaluation, audit and enforcement of these standards.
+
+This dataset contains building information for the buildings that are registered in the ABS program. This information was collected from building owners/managers during the initial registration process, and is updated on an annual basis as part of the registration renewal process.
+
+```{r}
+# format of dataset
+class(apt_buildings)
+```
+
+```{r}
+# Number of rows and cols
+dim(apt_buildings)
+```
+
+```{r}
+# Variables info like type and name
+glimpse(apt_buildings)
+```
+
