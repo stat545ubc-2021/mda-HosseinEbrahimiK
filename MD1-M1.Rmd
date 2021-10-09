@@ -2,7 +2,10 @@
 title: "Mini Data Analysis - Milestone 1"
 author: "Hossein EbrahimiKondori"
 date: "10/9/2021"
-output: html_document
+output: 
+        md_document:
+            variant: markdown_github
+        #html_document: defult
 ---
 
 ```{r setup, include=FALSE}
