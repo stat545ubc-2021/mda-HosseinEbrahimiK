@@ -359,3 +359,43 @@ have made a neighborhood best for them?
 
 Based on these question and overall properties of datasets, I would like
 to explore Vancouver_trees dataset.
+
+# Task2
+
+1.  What is the distribution of the diameter of trees in Vancouver?
+    Since the diameter is being used to calculate the age of a tree,
+    seeing this distribution gives us a rough idea about the
+    distribution.
+
+``` r
+diameter_dist <- vancouver_trees %>%
+  ggplot(aes(diameter)) +
+  geom_density(fill='blue')
+
+print(diameter_dist)
+```
+
+![](MD1-M1_files/figure-markdown_github/unnamed-chunk-15-1.png)
+
+``` r
+outlier <- vancouver_trees %>%
+  filter(diameter > 50) %>%
+  dim()
+outlier
+```
+
+    ## [1] 153  20
+
+Since there are only 153 trees with more than 50.0 diameters (outliers),
+we filter them out to have a better understanding of the distribution.
+
+``` r
+diameter_dist <- vancouver_trees %>%
+  filter(diameter < 50) %>%
+  ggplot(aes(diameter, ..density..)) +
+  geom_density(fill='blue')
+
+print(diameter_dist)
+```
+
+![](MD1-M1_files/figure-markdown_github/unnamed-chunk-17-1.png)
