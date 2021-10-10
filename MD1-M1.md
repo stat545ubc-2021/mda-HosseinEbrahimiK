@@ -323,12 +323,14 @@ glimpse(apt_buildings)
 The most two interesting datasets for me are cancer_sample and
 Vancouver_trees datasets. For the cancer dataset, I am curious about how
 different aspects of a cell’s nuclei attribute to cancer and whether
-there is any correlation between them.
+there is any correlation between them. Also, most of its variables are
+numeric, which makes it easy to analyze.
 
-Since I moved to Vancouver, I have been obsessed with the trees of the
-city. I would like to find out the different types of trees overall and
-in each neighborhood within this dataset. Also, finding the oldest
-recorded trees in Vancouver was really exciting to me.
+I would like to find out the different types of trees overall and in
+each neighborhood within this dataset. It has different variables such
+as date, numeric, and characters that make it interesting to analyze.
+Also, finding the oldest recorded trees in Vancouver was really exciting
+to me.
 
 ``` r
 oldest_tree <- vancouver_trees %>%
@@ -482,3 +484,19 @@ print(dmnnt_trees)
     ##  9 HASTINGS-SUNRISE         CERASIFERA     972
     ## 10 MOUNT PLEASANT           SERRULATA      948
     ## # … with 12 more rows
+
+# Task 3
+
+1.  Which types of trees have been planted the most in the past ten
+    years in each neighborhood? In other words, is there a trend in
+    cultivated tree species in each area?
+
+2.  Is there any kind of relation between the height of trees (with the
+    same type) and the neighborhood they have been planted in?
+
+3.  Within each neighborhood, do trees with a curb around them tend to
+    have smaller diameters (in terms of growth)?
+
+4.  Could we validate within the dataset that the age of a tree directly
+    relates to its diameter? Is it the same rate among all tree species,
+    or it differs from one to another?

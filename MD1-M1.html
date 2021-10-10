@@ -387,8 +387,8 @@ glimpse(apt_buildings)</code></pre>
 </div>
 <div id="task1.3" class="section level2">
 <h2>Task1.3</h2>
-<p>The most two interesting datasets for me are cancer_sample and Vancouver_trees datasets. For the cancer dataset, I am curious about how different aspects of a cell’s nuclei attribute to cancer and whether there is any correlation between them.</p>
-<p>Since I moved to Vancouver, I have been obsessed with the trees of the city. I would like to find out the different types of trees overall and in each neighborhood within this dataset. Also, finding the oldest recorded trees in Vancouver was really exciting to me.</p>
+<p>The most two interesting datasets for me are cancer_sample and Vancouver_trees datasets. For the cancer dataset, I am curious about how different aspects of a cell’s nuclei attribute to cancer and whether there is any correlation between them. Also, most of its variables are numeric, which makes it easy to analyze.</p>
+<p>I would like to find out the different types of trees overall and in each neighborhood within this dataset. It has different variables such as date, numeric, and characters that make it interesting to analyze. Also, finding the oldest recorded trees in Vancouver was really exciting to me.</p>
 <pre class="r"><code>oldest_tree &lt;- vancouver_trees %&gt;%
   arrange(date_planted) %&gt;%
   filter(date_planted == first(date_planted)) %&gt;%
@@ -493,6 +493,15 @@ print(age_nghbr_rel)</code></pre>
 ##  9 HASTINGS-SUNRISE         CERASIFERA     972
 ## 10 MOUNT PLEASANT           SERRULATA      948
 ## # … with 12 more rows</code></pre>
+</div>
+<div id="task-3" class="section level1">
+<h1>Task 3</h1>
+<ol style="list-style-type: decimal">
+<li><p>Which types of trees have been planted the most in the past ten years in each neighborhood? In other words, is there a trend in cultivated tree species in each area?</p></li>
+<li><p>Is there any kind of relation between the height of trees (with the same type) and the neighborhood they have been planted in?</p></li>
+<li><p>Within each neighborhood, do trees with a curb around them tend to have smaller diameters (in terms of growth)?</p></li>
+<li><p>Could we validate within the dataset that the age of a tree directly relates to its diameter? Is it the same rate among all tree species, or it differs from one to another?</p></li>
+</ol>
 </div>
 
 
