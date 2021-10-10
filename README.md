@@ -3,7 +3,7 @@ This is a individual mini data analysis project for UBC course *[STAT 545A](http
 
 - [x] Milestone 1
   * Exploring datasets
-  * Get insight about variables and plotting differnt quantities
+  * Get insight about variables and plotting different quantities
   * Asking 4 research questions about the data
   * Release a milestone 1 version 
 - [] Milestone 2
