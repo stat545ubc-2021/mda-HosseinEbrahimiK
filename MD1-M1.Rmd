@@ -161,7 +161,7 @@ glimpse(apt_buildings)
 
 The most two interesting datasets for me are cancer_sample and Vancouver_trees datasets. For the cancer dataset, I am curious about how different aspects of a cell’s nuclei attribute to cancer and whether there is any correlation between them.
 
-Since I moved to Vancouver, I have been obsessed with the trees of the city. I would like to find out the different types of trees overall and in each neighborhood within this dataset. Also, finding the oldest recorded trees in Vancouver was really exciting to me. Maybe I got a chance to visit them when I was around that area!
+Since I moved to Vancouver, I have been obsessed with the trees of the city. I would like to find out the different types of trees overall and in each neighborhood within this dataset. Also, finding the oldest recorded trees in Vancouver was really exciting to me.
 
 ```{r}
 oldest_tree <- vancouver_trees %>%
@@ -179,3 +179,67 @@ Cancer_sample: What factor makes cancer cells most distinguishable from normal c
 Vancouver_trees: For each tree species, does the neighborhood the tree has grown affect the tree's growth (height or diameter)? What factors have made a neighborhood best for them?
 
 Based on these question and overall properties of datasets, I would like to explore Vancouver_trees dataset.
+
+# Task2 (2.1 and 2.2)
+1. What is the density distribution of the diameter of trees in Vancouver? Since the diameter is being used to calculate the age of a tree, seeing this distribution gives us a rough idea about the distribution of age.
+
+```{r}
+dmtr <- vancouver_trees %>%
+  ggplot(aes(diameter)) +
+  geom_density(fill='blue')
+
+print(dmtr)
+```
+
+```{r}
+outlier <- vancouver_trees %>%
+  filter(diameter > 50) %>%
+  nrow()
+outlier
+```
+Since there are only 153 trees (total entries: 146,611) with more than 50.0 diameters (outliers), we filter them out to have a better understanding of the distribution.
+
+```{r}
+dmtr_dist <- vancouver_trees %>%
+  filter(diameter < 50) %>% # filtering outliers
+  ggplot(aes(diameter)) +
+  geom_density(fill='blue')
+
+print(dmtr_dist)
+```
+
+2. In the last section, we mentioned the relation between the diameter and age of a tree. For this part, let's calculate the age of trees based on the date planted and `Sys.Date()`. [source of year extraction](https://stackoverflow.com/questions/37707060/converting-data-frame-column-from-character-to-numeric/37707117).
+
+```{r}
+van_tree_wAge <- vancouver_trees %>%
+  # Extracting year from date format and convert it to numeric value
+  mutate(age = as.numeric(format(as.Date(Sys.Date(),format="%Y-%m-%d"),"%Y")) -
+           as.numeric(format(as.Date(date_planted,format="%Y-%m-%d"),"%Y"))) %>%
+  select(tree_id, date_planted, age, everything())
+
+
+head(van_tree_wAge)
+```
+
+3. Now that we have the age variable, we can explore the relationship between the age of trees and the neighborhood in order to see how age is distributed in each area.
+
+```{r}
+age_nghbr_rel <- van_tree_wAge %>%
+  ggplot(aes(age, neighbourhood_name)) +
+  ggridges::geom_density_ridges(alpha=0.5)
+  
+print(age_nghbr_rel)
+```
+
+4. For this section, I want to create a tibble with neighbourhood_name, the most dominant tree species (based on the count), and its count for each neighborhood.
+
+```{r}
+dmnnt_trees <- vancouver_trees %>%
+  group_by(neighbourhood_name) %>%
+  count(species_name) %>%
+  arrange(desc(n)) %>%
+  top_n(1)
+  
+  
+print(dmnnt_trees)
+```
