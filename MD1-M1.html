@@ -171,16 +171,16 @@ pre code {
 </div>
 
 
-<div id="preliminaries" class="section level2">
-<h2>Preliminaries</h2>
+<div id="preliminaries" class="section level1">
+<h1>Preliminaries</h1>
 <p>First, let’s load the packages we want to work with.</p>
 <pre class="r"><code>suppressPackageStartupMessages(library(datateachr))
 suppressPackageStartupMessages(library(tidyverse))</code></pre>
 <p>If you do not have <a href="https://github.com/UBC-MDS/datateachr"><code>datateachr</code></a> installed, run the following code in your <strong>R terminal</strong>.</p>
 <pre><code>install.packages(&quot;devtools&quot;)
 devtools::install_github(&quot;UBC-MDS/datateachr&quot;)</code></pre>
-<div id="task1.1" class="section level3">
-<h3>Task1.1</h3>
+<div id="task1.1" class="section level2">
+<h2>Task1.1</h2>
 <p>Top 4 personal appealing datasets:</p>
 <ol style="list-style-type: decimal">
 <li>cancer_sample</li>
@@ -189,11 +189,11 @@ devtools::install_github(&quot;UBC-MDS/datateachr&quot;)</code></pre>
 <li>apt_buildings</li>
 </ol>
 </div>
-<div id="task1.2" class="section level3">
-<h3>Task1.2</h3>
+<div id="task1.2" class="section level2">
+<h2>Task1.2</h2>
 <p>First, to familiarize more with each dataset, we take look at class type, number of rows, number of columns, variables’ name, and type of each variable for each dataset. These properties could be obtained by <code>class()</code>, <code>dim()</code> and <code>glimpse()</code> functions.</p>
-<div id="cancer-sample-dataset" class="section level4">
-<h4>Cancer sample dataset</h4>
+<div id="cancer-sample-dataset" class="section level3">
+<h3>Cancer sample dataset</h3>
 <p>For this sepcific dataset, it is useful to see decription of variables availaibe at <a href="https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Diagnostic%29"><code>UCI Machine Learning Breast Cancer Wisconsin</code></a>. The summary is provided below:</p>
 <p><strong>Variables Information</strong>:</p>
 <ol style="list-style-type: decimal">
@@ -256,8 +256,8 @@ glimpse(cancer_sample)</code></pre>
 ## $ symmetry_worst          &lt;dbl&gt; 0.4601, 0.2750, 0.3613, 0.6638, 0.2364, 0.3985…
 ## $ fractal_dimension_worst &lt;dbl&gt; 0.11890, 0.08902, 0.08758, 0.17300, 0.07678, 0…</code></pre>
 </div>
-<div id="vancouver-trees-dataset" class="section level4">
-<h4>Vancouver trees dataset</h4>
+<div id="vancouver-trees-dataset" class="section level3">
+<h3>Vancouver trees dataset</h3>
 <p>The general information about the dataset that is obtained from <a href="https://opendata.vancouver.ca/explore/dataset/street-trees/information/?disjunctive.species_name&amp;disjunctive.common_name&amp;disjunctive.height_range_id&amp;dataChart=eyJxdWVyaWVzIjpbeyJjb25maWciOnsiZGF0YXNldCI6InN0cmVldC10cmVlcyIsIm9wdGlvbnMiOnsiZGlzanVuY3RpdmUuc3BlY2llc19uYW1lIjp0cnVlLCJkaXNqdW5jdGl2ZS5jb21tb25fbmFtZSI6dHJ1ZSwiZGlzanVuY3RpdmUuaGVpZ2h0X3JhbmdlX2lkIjp0cnVlfX0sImNoYXJ0cyI6W3siYWxpZ25Nb250aCI6dHJ1ZSwidHlwZSI6ImxpbmUiLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJoZWlnaHRfcmFuZ2VfaWQiLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiIjMDI3OUIxIn1dLCJ4QXhpcyI6ImRhdGVfcGxhbnRlZCIsIm1heHBvaW50cyI6IiIsInRpbWVzY2FsZSI6InllYXIiLCJzb3J0IjoiIn1dLCJkaXNwbGF5TGVnZW5kIjp0cnVlLCJhbGlnbk1vbnRoIjp0cnVlfQ%3D%3D"><code>Vancouver Open Portal</code></a>.</p>
 <p>The street tree dataset includes a listing of public trees on boulevards in the City of Vancouver and provides data on tree coordinates, species and other related characteristics. Park trees and private trees are not included in the inventory.</p>
 <p><strong>Data currency</strong></p>
@@ -297,8 +297,8 @@ glimpse(vancouver_trees)</code></pre>
 ## $ longitude          &lt;dbl&gt; -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
 ## $ latitude           &lt;dbl&gt; 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…</code></pre>
 </div>
-<div id="building-permits-dataset" class="section level4">
-<h4>Building permits dataset</h4>
+<div id="building-permits-dataset" class="section level3">
+<h3>Building permits dataset</h3>
 <p>The general information about the dataset that is obtained from <a href="https://opendata.vancouver.ca/explore/dataset/issued-building-permits/information/"><code>Vancouver Open Portal</code></a>.</p>
 <p>Building permits are required for new buildings, additions or alterations to existing buildings, and for demolitions or salvage and abatement work.</p>
 <p>This dataset includes information of all building permits issued by the City of Vancouver, starting in 2017. The data is based on permit issuance date and does not show current status of a permit, or changes after a permit is originally issued.</p>
@@ -331,8 +331,8 @@ glimpse(building_permits)</code></pre>
 ## $ year                        &lt;dbl&gt; 2017, 2017, 2017, 2017, 2017, 2017, 2017, …
 ## $ bi_id                       &lt;dbl&gt; 524, 535, 539, 541, 543, 546, 547, 548, 54…</code></pre>
 </div>
-<div id="apartment-buildings" class="section level4">
-<h4>Apartment buildings</h4>
+<div id="apartment-buildings" class="section level3">
+<h3>Apartment buildings</h3>
 <p>The general information about the dataset that is obtained from <a href="https://opendata.vancouver.ca/explore/dataset/issued-building-permits/information/"><code>Toronto Open Data</code></a>.</p>
 <p>The Apartment Building Standard (ABS) program is based on a new bylaw Chapter 354, which defines formal criteria to identify all rental apartment buildings in the city with 3 or more storeys and 10 or more units. The ABS program is part of RentSafeTO which is a multi-residential inspection program that establishes standards on how building owners operate their building(s) and communicate with their tenants, in addition to establishing a schedule for continuous building evaluation, audit and enforcement of these standards.</p>
 <p>This dataset contains building information for the buildings that are registered in the ABS program. This information was collected from building owners/managers during the initial registration process, and is updated on an annual basis as part of the registration renewal process.</p>
@@ -384,6 +384,28 @@ glimpse(apt_buildings)</code></pre>
 ## $ cooling_room                     &lt;chr&gt; &quot;NO&quot;, &quot;NO&quot;, &quot;NO&quot;, &quot;NO&quot;, &quot;NO&quot;, &quot;NO&quot;, &quot;…
 ## $ no_barrier_free_accessible_units &lt;dbl&gt; 2, 0, 0, 42, 0, NA, 14, 0, 0, 1, 25, …</code></pre>
 </div>
+</div>
+<div id="task1.3" class="section level2">
+<h2>Task1.3</h2>
+<p>The most two interesting datasets for me are cancer_sample and Vancouver_trees datasets. For the cancer dataset, I am curious about how different aspects of a cell’s nuclei attribute to cancer and whether there is any correlation between them.</p>
+<p>Since I moved to Vancouver, I have been obsessed with the trees of the city. I would like to find out the different types of trees overall and in each neighborhood within this dataset. Also, finding the oldest recorded trees in Vancouver was really exciting to me. Maybe I got a chance to visit them when I was around that area!</p>
+<pre class="r"><code>oldest_tree &lt;- vancouver_trees %&gt;%
+  arrange(date_planted) %&gt;%
+  filter(date_planted == first(date_planted)) %&gt;%
+  select(std_street, neighbourhood_name, date_planted, latitude, longitude)
+
+oldest_tree</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##   std_street neighbourhood_name date_planted latitude longitude
+##   &lt;chr&gt;      &lt;chr&gt;              &lt;date&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+## 1 E 46TH AV  SUNSET             1989-10-27       49.2     -123.
+## 2 E 46TH AV  SUNSET             1989-10-27       49.2     -123.</code></pre>
+</div>
+<div id="task1.4" class="section level2">
+<h2>Task1.4</h2>
+<p>Cancer_sample: What factor makes cancer cells most distinguishable from normal cells? In other words, if we have to only look at one feature to see if the cell is cancerous or not, which feature gives us the most confidence in our prediction?</p>
+<p>Vancouver_trees: For each tree species, does the neighborhood the tree has grown affect the tree’s growth (height or diameter)? What factors have made a neighborhood best for them?</p>
+<p>Based on these question and overall properties of datasets, I would like to explore Vancouver_trees dataset.</p>
 </div>
 </div>
 

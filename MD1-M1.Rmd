@@ -5,14 +5,14 @@ date: "10/9/2021"
 output: 
         md_document:
             variant: markdown_github
-        #html_document: defult
+        #html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Preliminaries
+# Preliminaries
 
 First, let's load the packages we want to work with.
 
@@ -27,7 +27,7 @@ install.packages("devtools")
 devtools::install_github("UBC-MDS/datateachr")
 ```
 
-### Task1.1
+## Task1.1
 
 Top 4 personal appealing datasets:
 
@@ -36,10 +36,10 @@ Top 4 personal appealing datasets:
 3. building_permits
 4. apt_buildings
 
-### Task1.2
+## Task1.2
 First, to familiarize more with each dataset, we take look at class type, number of rows, number of columns, variables' name, and type of each variable for each dataset. These properties could be obtained by `class()`, `dim()` and `glimpse()` functions.
 
-#### Cancer sample dataset
+### Cancer sample dataset
 For this sepcific dataset, it is useful to see decription of variables availaibe at [`UCI Machine Learning Breast Cancer Wisconsin`](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Diagnostic%29). The summary is provided below:
 
 **Variables Information**:
@@ -75,7 +75,7 @@ dim(cancer_sample)
 # name and type of each variable
 glimpse(cancer_sample)
 ```
-#### Vancouver trees dataset
+### Vancouver trees dataset
 The general information about the dataset that is obtained from [`Vancouver Open Portal`](https://opendata.vancouver.ca/explore/dataset/street-trees/information/?disjunctive.species_name&disjunctive.common_name&disjunctive.height_range_id&dataChart=eyJxdWVyaWVzIjpbeyJjb25maWciOnsiZGF0YXNldCI6InN0cmVldC10cmVlcyIsIm9wdGlvbnMiOnsiZGlzanVuY3RpdmUuc3BlY2llc19uYW1lIjp0cnVlLCJkaXNqdW5jdGl2ZS5jb21tb25fbmFtZSI6dHJ1ZSwiZGlzanVuY3RpdmUuaGVpZ2h0X3JhbmdlX2lkIjp0cnVlfX0sImNoYXJ0cyI6W3siYWxpZ25Nb250aCI6dHJ1ZSwidHlwZSI6ImxpbmUiLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJoZWlnaHRfcmFuZ2VfaWQiLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiIjMDI3OUIxIn1dLCJ4QXhpcyI6ImRhdGVfcGxhbnRlZCIsIm1heHBvaW50cyI6IiIsInRpbWVzY2FsZSI6InllYXIiLCJzb3J0IjoiIn1dLCJkaXNwbGF5TGVnZW5kIjp0cnVlLCJhbGlnbk1vbnRoIjp0cnVlfQ%3D%3D).
 
 The street tree dataset includes a listing of public trees on boulevards in the City of Vancouver and provides data on tree coordinates, species and other related characteristics. Park trees and private trees are not included in the inventory.
@@ -106,7 +106,7 @@ dim(vancouver_trees)
 # name and type of variables
 glimpse(vancouver_trees)
 ```
-#### Building permits dataset
+### Building permits dataset
 The general information about the dataset that is obtained from [`Vancouver Open Portal`](https://opendata.vancouver.ca/explore/dataset/issued-building-permits/information/).
 
 Building permits are required for new buildings, additions or alterations to existing buildings, and for demolitions or salvage and abatement work.
@@ -134,7 +134,7 @@ dim(building_permits)
 # variables info
 glimpse(building_permits)
 ```
-#### Apartment buildings
+### Apartment buildings
 
 The general information about the dataset that is obtained from [`Toronto Open Data`](https://opendata.vancouver.ca/explore/dataset/issued-building-permits/information/).
 
@@ -157,3 +157,25 @@ dim(apt_buildings)
 glimpse(apt_buildings)
 ```
 
+## Task1.3
+
+The most two interesting datasets for me are cancer_sample and Vancouver_trees datasets. For the cancer dataset, I am curious about how different aspects of a cell’s nuclei attribute to cancer and whether there is any correlation between them.
+
+Since I moved to Vancouver, I have been obsessed with the trees of the city. I would like to find out the different types of trees overall and in each neighborhood within this dataset. Also, finding the oldest recorded trees in Vancouver was really exciting to me. Maybe I got a chance to visit them when I was around that area!
+
+```{r}
+oldest_tree <- vancouver_trees %>%
+  arrange(date_planted) %>%
+  filter(date_planted == first(date_planted)) %>%
+  select(std_street, neighbourhood_name, date_planted, latitude, longitude)
+
+oldest_tree
+```
+
+## Task1.4
+
+Cancer_sample: What factor makes cancer cells most distinguishable from normal cells? In other words, if we have to only look at one feature to see if the cell is cancerous or not, which feature gives us the most confidence in our prediction?
+
+Vancouver_trees: For each tree species, does the neighborhood the tree has grown affect the tree's growth (height or diameter)? What factors have made a neighborhood best for them?
+
+Based on these question and overall properties of datasets, I would like to explore Vancouver_trees dataset.

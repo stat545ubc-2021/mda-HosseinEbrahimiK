@@ -1,4 +1,4 @@
-## Preliminaries
+# Preliminaries
 
 First, let’s load the packages we want to work with.
 
@@ -13,7 +13,7 @@ installed, run the following code in your **R terminal**.
     install.packages("devtools")
     devtools::install_github("UBC-MDS/datateachr")
 
-### Task1.1
+## Task1.1
 
 Top 4 personal appealing datasets:
 
@@ -22,14 +22,14 @@ Top 4 personal appealing datasets:
 3.  building_permits
 4.  apt_buildings
 
-### Task1.2
+## Task1.2
 
 First, to familiarize more with each dataset, we take look at class
 type, number of rows, number of columns, variables’ name, and type of
 each variable for each dataset. These properties could be obtained by
 `class()`, `dim()` and `glimpse()` functions.
 
-#### Cancer sample dataset
+### Cancer sample dataset
 
 For this sepcific dataset, it is useful to see decription of variables
 availaibe at
@@ -108,7 +108,7 @@ glimpse(cancer_sample)
     ## $ symmetry_worst          <dbl> 0.4601, 0.2750, 0.3613, 0.6638, 0.2364, 0.3985…
     ## $ fractal_dimension_worst <dbl> 0.11890, 0.08902, 0.08758, 0.17300, 0.07678, 0…
 
-#### Vancouver trees dataset
+### Vancouver trees dataset
 
 The general information about the dataset that is obtained from
 [`Vancouver Open Portal`](https://opendata.vancouver.ca/explore/dataset/street-trees/information/?disjunctive.species_name&disjunctive.common_name&disjunctive.height_range_id&dataChart=eyJxdWVyaWVzIjpbeyJjb25maWciOnsiZGF0YXNldCI6InN0cmVldC10cmVlcyIsIm9wdGlvbnMiOnsiZGlzanVuY3RpdmUuc3BlY2llc19uYW1lIjp0cnVlLCJkaXNqdW5jdGl2ZS5jb21tb25fbmFtZSI6dHJ1ZSwiZGlzanVuY3RpdmUuaGVpZ2h0X3JhbmdlX2lkIjp0cnVlfX0sImNoYXJ0cyI6W3siYWxpZ25Nb250aCI6dHJ1ZSwidHlwZSI6ImxpbmUiLCJmdW5jIjoiQVZHIiwieUF4aXMiOiJoZWlnaHRfcmFuZ2VfaWQiLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiIjMDI3OUIxIn1dLCJ4QXhpcyI6ImRhdGVfcGxhbnRlZCIsIm1heHBvaW50cyI6IiIsInRpbWVzY2FsZSI6InllYXIiLCJzb3J0IjoiIn1dLCJkaXNwbGF5TGVnZW5kIjp0cnVlLCJhbGlnbk1vbnRoIjp0cnVlfQ%3D%3D).
@@ -179,7 +179,7 @@ glimpse(vancouver_trees)
     ## $ longitude          <dbl> -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
     ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
 
-#### Building permits dataset
+### Building permits dataset
 
 The general information about the dataset that is obtained from
 [`Vancouver Open Portal`](https://opendata.vancouver.ca/explore/dataset/issued-building-permits/information/).
@@ -240,7 +240,7 @@ glimpse(building_permits)
     ## $ year                        <dbl> 2017, 2017, 2017, 2017, 2017, 2017, 2017, …
     ## $ bi_id                       <dbl> 524, 535, 539, 541, 543, 546, 547, 548, 54…
 
-#### Apartment buildings
+### Apartment buildings
 
 The general information about the dataset that is obtained from
 [`Toronto Open Data`](https://opendata.vancouver.ca/explore/dataset/issued-building-permits/information/).
@@ -317,3 +317,45 @@ glimpse(apt_buildings)
     ## $ facilities_available             <chr> "Recycling bins", "Green Bin / Organi…
     ## $ cooling_room                     <chr> "NO", "NO", "NO", "NO", "NO", "NO", "…
     ## $ no_barrier_free_accessible_units <dbl> 2, 0, 0, 42, 0, NA, 14, 0, 0, 1, 25, …
+
+## Task1.3
+
+The most two interesting datasets for me are cancer_sample and
+Vancouver_trees datasets. For the cancer dataset, I am curious about how
+different aspects of a cell’s nuclei attribute to cancer and whether
+there is any correlation between them.
+
+Since I moved to Vancouver, I have been obsessed with the trees of the
+city. I would like to find out the different types of trees overall and
+in each neighborhood within this dataset. Also, finding the oldest
+recorded trees in Vancouver was really exciting to me. Maybe I got a
+chance to visit them when I was around that area!
+
+``` r
+oldest_tree <- vancouver_trees %>%
+  arrange(date_planted) %>%
+  filter(date_planted == first(date_planted)) %>%
+  select(std_street, neighbourhood_name, date_planted, latitude, longitude)
+
+oldest_tree
+```
+
+    ## # A tibble: 2 × 5
+    ##   std_street neighbourhood_name date_planted latitude longitude
+    ##   <chr>      <chr>              <date>          <dbl>     <dbl>
+    ## 1 E 46TH AV  SUNSET             1989-10-27       49.2     -123.
+    ## 2 E 46TH AV  SUNSET             1989-10-27       49.2     -123.
+
+## Task1.4
+
+Cancer_sample: What factor makes cancer cells most distinguishable from
+normal cells? In other words, if we have to only look at one feature to
+see if the cell is cancerous or not, which feature gives us the most
+confidence in our prediction?
+
+Vancouver_trees: For each tree species, does the neighborhood the tree
+has grown affect the tree’s growth (height or diameter)? What factors
+have made a neighborhood best for them?
+
+Based on these question and overall properties of datasets, I would like
+to explore Vancouver_trees dataset.
