@@ -11,7 +11,7 @@ This is a individual mini data analysis project for UBC course *[STAT 545A](http
  
  ## Project Files
 1. *[md file](/MD1-M1.md)*: Github markdown
-2. *[html file](/MD1-M1.html)*: html version
+2. *[html file](/MD1-M1.Rmd)*: Rmd file
 
 
 ## Contributers
