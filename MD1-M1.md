@@ -328,8 +328,7 @@ there is any correlation between them.
 Since I moved to Vancouver, I have been obsessed with the trees of the
 city. I would like to find out the different types of trees overall and
 in each neighborhood within this dataset. Also, finding the oldest
-recorded trees in Vancouver was really exciting to me. Maybe I got a
-chance to visit them when I was around that area!
+recorded trees in Vancouver was really exciting to me.
 
 ``` r
 oldest_tree <- vancouver_trees %>%
@@ -360,19 +359,19 @@ have made a neighborhood best for them?
 Based on these question and overall properties of datasets, I would like
 to explore Vancouver_trees dataset.
 
-# Task2
+# Task2 (2.1 and 2.2)
 
-1.  What is the distribution of the diameter of trees in Vancouver?
-    Since the diameter is being used to calculate the age of a tree,
-    seeing this distribution gives us a rough idea about the
-    distribution.
+1.  What is the density distribution of the diameter of trees in
+    Vancouver? Since the diameter is being used to calculate the age of
+    a tree, seeing this distribution gives us a rough idea about the
+    distribution of age.
 
 ``` r
-diameter_dist <- vancouver_trees %>%
+dmtr <- vancouver_trees %>%
   ggplot(aes(diameter)) +
   geom_density(fill='blue')
 
-print(diameter_dist)
+print(dmtr)
 ```
 
 ![](MD1-M1_files/figure-markdown_github/unnamed-chunk-15-1.png)
@@ -380,22 +379,106 @@ print(diameter_dist)
 ``` r
 outlier <- vancouver_trees %>%
   filter(diameter > 50) %>%
-  dim()
+  nrow()
 outlier
 ```
 
-    ## [1] 153  20
+    ## [1] 153
 
-Since there are only 153 trees with more than 50.0 diameters (outliers),
-we filter them out to have a better understanding of the distribution.
+Since there are only 153 trees (total entries: 146,611) with more than
+50.0 diameters (outliers), we filter them out to have a better
+understanding of the distribution.
 
 ``` r
-diameter_dist <- vancouver_trees %>%
-  filter(diameter < 50) %>%
-  ggplot(aes(diameter, ..density..)) +
+dmtr_dist <- vancouver_trees %>%
+  filter(diameter < 50) %>% # filtering outliers
+  ggplot(aes(diameter)) +
   geom_density(fill='blue')
 
-print(diameter_dist)
+print(dmtr_dist)
 ```
 
 ![](MD1-M1_files/figure-markdown_github/unnamed-chunk-17-1.png)
+
+1.  In the last section, we mentioned the relation between the diameter
+    and age of a tree. For this part, let’s calculate the age of trees
+    based on the date planted and `Sys.Date()`. [source of year
+    extraction](https://stackoverflow.com/questions/37707060/converting-data-frame-column-from-character-to-numeric/37707117).
+
+``` r
+van_tree_wAge <- vancouver_trees %>%
+  # Extracting year from date format and convert it to numeric value
+  mutate(age = as.numeric(format(as.Date(Sys.Date(),format="%Y-%m-%d"),"%Y")) -
+           as.numeric(format(as.Date(date_planted,format="%Y-%m-%d"),"%Y"))) %>%
+  select(tree_id, date_planted, age, everything())
+
+
+head(van_tree_wAge)
+```
+
+    ## # A tibble: 6 × 21
+    ##   tree_id date_planted   age civic_number std_street genus_name species_name
+    ##     <dbl> <date>       <dbl>        <dbl> <chr>      <chr>      <chr>       
+    ## 1  149556 1999-01-13      22          494 W 58TH AV  ULMUS      AMERICANA   
+    ## 2  149563 1996-05-31      25          450 W 58TH AV  ZELKOVA    SERRATA     
+    ## 3  149579 1993-11-22      28         4994 WINDSOR ST STYRAX     JAPONICA    
+    ## 4  149590 1996-04-29      25          858 E 39TH AV  FRAXINUS   AMERICANA   
+    ## 5  149604 1993-12-17      28         5032 WINDSOR ST ACER       CAMPESTRE   
+    ## 6  149616 NA              NA          585 W 61ST AV  PYRUS      CALLERYANA  
+    ## # … with 14 more variables: cultivar_name <chr>, common_name <chr>,
+    ## #   assigned <chr>, root_barrier <chr>, plant_area <chr>,
+    ## #   on_street_block <dbl>, on_street <chr>, neighbourhood_name <chr>,
+    ## #   street_side_name <chr>, height_range_id <dbl>, diameter <dbl>, curb <chr>,
+    ## #   longitude <dbl>, latitude <dbl>
+
+1.  Now that we have the age variable, we can explore the relationship
+    between the age of trees and the neighborhood in order to see how
+    age is distributed in each area.
+
+``` r
+age_nghbr_rel <- van_tree_wAge %>%
+  ggplot(aes(age, neighbourhood_name)) +
+  ggridges::geom_density_ridges(alpha=0.5)
+  
+print(age_nghbr_rel)
+```
+
+    ## Picking joint bandwidth of 1.35
+
+    ## Warning: Removed 76548 rows containing non-finite values (stat_density_ridges).
+
+![](MD1-M1_files/figure-markdown_github/unnamed-chunk-19-1.png)
+
+1.  For this section, I want to create a tibble with neighbourhood_name,
+    the most dominant tree species (based on the count), and its count
+    for each neighborhood.
+
+``` r
+dmnnt_trees <- vancouver_trees %>%
+  group_by(neighbourhood_name) %>%
+  count(species_name) %>%
+  arrange(desc(n)) %>%
+  top_n(1)
+```
+
+    ## Selecting by n
+
+``` r
+print(dmnnt_trees)
+```
+
+    ## # A tibble: 22 × 3
+    ## # Groups:   neighbourhood_name [22]
+    ##    neighbourhood_name       species_name     n
+    ##    <chr>                    <chr>        <int>
+    ##  1 VICTORIA-FRASERVIEW      CERASIFERA    1241
+    ##  2 KITSILANO                PLATANOIDES   1188
+    ##  3 DUNBAR-SOUTHLANDS        PLATANOIDES   1165
+    ##  4 SHAUGHNESSY              PLATANOIDES   1139
+    ##  5 KERRISDALE               PLATANOIDES   1067
+    ##  6 DOWNTOWN                 RUBRUM        1019
+    ##  7 KENSINGTON-CEDAR COTTAGE SERRULATA     1002
+    ##  8 RENFREW-COLLINGWOOD      SERRULATA      980
+    ##  9 HASTINGS-SUNRISE         CERASIFERA     972
+    ## 10 MOUNT PLEASANT           SERRULATA      948
+    ## # … with 12 more rows
