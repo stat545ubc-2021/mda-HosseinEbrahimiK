@@ -14,8 +14,8 @@ This time, we will explore more in depth the concept of *tidy data*, and hopeful
 Begin by loading your data and the tidyverse package below: 
 
 ```{r, message = FALSE}
-library(datateachr) # <- might contain the data you picked!
-library(tidyverse)
+suppressMessages(library(datateachr)) # <- might contain the data you picked!
+suppressMessages(library(tidyverse))
 ```
 
 # Learning Objectives
@@ -42,7 +42,7 @@ From milestone 1, you should have an idea of the basic structure of your dataset
 First, write out the 4 research questions you defined in milestone 1 were. This will guide your work through milestone 2:
 
 <!-------------------------- Start your work below ---------------------------->
-1. Which types of trees have been planted the most in the past ten years in each neighborhood? In other words, is there a trend in cultivated tree species in each area?
+1. Which types of trees have been planted the most in the past five years in each neighborhood? In other words, is there a trend in cultivated tree species in each area?
 2. Is there any kind of relation between the height of trees (with the same type) and the neighborhood they have been planted in?
 3. Within each neighborhood, do trees with a curb around them tend to have smaller diameters (in terms of growth)?
 4. Could we validate within the dataset that the age of a tree directly relates to its diameter? Is it the same rate among all tree species, or it differs from one to another?
@@ -71,7 +71,9 @@ Ensure that the output of each operation is printed!
 Make sure it's clear what research question you are doing each operation for!
 
 <!------------------------- Start your work below ----------------------------->
-#### Question1: any trend in cultivated tree species in each area in past 10 years?
+#### Question 1: any trend in cultivated tree species in each area in past 5 years?
+
+For this question, I choose **computing number of observations (option 2)** for the summarizing task. If we are going to compare between each area that which tree species is most popular, it would be suitable to know exactly how many trees were planted that year in neighborhoods. For example, if we're saying 80% percent of planted trees were from ABIES in Kits and 70% in Downtown, the number of total planted trees would be of interest to be more accurate. Also, it is useful in comparison between tree species in different years.
 
 ```{r}
 num_tr_nghbr <- vancouver_trees %>%
@@ -81,26 +83,30 @@ num_tr_nghbr <- vancouver_trees %>%
   group_by(neighbourhood_name, year_planted) %>%
   # trees has planted in the pas 10 years
   filter(as.numeric(substring(Sys.Date(), 1, 4)) - 
-          as.numeric(year_planted) <= 10) %>%
+          as.numeric(year_planted) <= 5) %>%
   # counting number of trees per year in each neighborhood
   tally()
 
 num_tr_nghbr
 ```
 
+I choose **option 6 (logarithmic scale and formatting the axes labels)** for this question. The plot is trying to convey the summarized variable in a way that is easy to compare the number of planted trees across years and neighborhoods.
+
 ```{r}
 hist_tr_nghbr <- num_tr_nghbr %>%
   ggplot(aes(neighbourhood_name, n)) +
-  geom_col(aes(fill=year_planted)) +
+  geom_col(aes(fill=year_planted), position = "dodge") +
   theme(axis.text.x = element_text(angle = 90)) +
-  scale_fill_brewer(palette = "Paired") +
+  scale_y_log10() +
   xlab("Neighbourhood") +
   ylab("Number of trees (log)")
 
 print(hist_tr_nghbr)
 ```
 
-#### Question2: Any relation between the height of trees (with the same type) and the neighborhood?
+#### Question 2: Any relation between the height of trees (with the same type) and the neighborhood?
+
+I choose **option 1: summary statistics** for this question. I calculated mean, min, max, median, and standard deviation of height across neighborhoods and tree species. It would be useful to know the mean and other statistics on the height when we're comparing it between two neighborhoods.
 
 ```{r}
 height_nghbr <- vancouver_trees %>%
@@ -113,7 +119,7 @@ height_nghbr <- vancouver_trees %>%
 
 height_nghbr
 ```
-
+Since we have many types of tree species in the data, I focused only on the family of trees instead of species and considered the top 3 that are most populated in all neighborhoods to investigate the question.  I plotted the density distribution of height of the tree families across neighborhoods (Implementing **options 7**).
 
 ```{r}
 top_genus <- vancouver_trees %>%
@@ -132,6 +138,13 @@ height_dist_nghbr <- vancouver_trees %>%
 height_dist_nghbr
 ```
 
+
+It seems the high distributions vary for each tree family across neighborhoods! As shown, the trees in the ACER family are higher in some neighborhoods than others. But, the distribution of PRUNUS does not vary much within neighborhoods.
+
+#### Question 3: curb affects diameters?
+
+For this research question, It would be good to know how many trees have curbs around them and how many do not. Because it would not be a fair comparison if we have a lot of observations from one population and few samples from another one. It turns out to be a case in our question! we do have fewer samples for ``curb=NO`` against ``curb=YES`` in each neighborhood. 
+
 ```{r}
 count_curbed <- vancouver_trees %>%
   group_by(neighbourhood_name, curb) %>%
@@ -140,23 +153,29 @@ count_curbed <- vancouver_trees %>%
 count_curbed
 ```
 
+I plotted the distribution of trees diameter with and without curbs in each neighborhood. so that it can help us identify does having a curb affects the tree's diameter. As shown in the plot, there is no significant difference between the distributions and their means  in most neighborhoods.
+
 ```{r}
 means <- vancouver_trees %>%
-  filter(diameter < 50) %>%
+  filter(0 < diameter & diameter < 50) %>%
   group_by(neighbourhood_name, curb) %>%
   summarise(mean_dmtr = mean(diameter), .groups = 'drop')
 
 dist_dmtr_nghbr <- vancouver_trees %>%
-  filter(diameter < 50) %>%
+  filter(0 < diameter & diameter < 50) %>%
   group_by(neighbourhood_name) %>%
   ggplot(aes(diameter)) + 
-  geom_density(aes(fill=curb), alpha=0.6) +
+  geom_density(aes(fill=curb), alpha=0.5) +
   geom_vline(data=means, aes(xintercept=means$mean_dmtr, color=curb), 
              linetype="dashed") +
   facet_wrap(~ neighbourhood_name)
 
 dist_dmtr_nghbr
 ```
+
+#### Question 4: Age Vs diameter across tree species?
+
+I created a categorical variable, named age_cat, based on the age of trees. This new variable has five categories: ``Youth, Mature, Middle Age, Senior, Ancient``. The reason for creating this was to first, have better visualization of age against diameter as scatter plot for this question was not that informative, and second, investigate how diameter is distributed in each period of ages.
 
 ```{r}
 van_tree_catAge <- vancouver_trees %>%
@@ -169,6 +188,8 @@ van_tree_catAge <- vancouver_trees %>%
 
 head(van_tree_catAge)
 ```
+
+For the top 3 tree species that we have the most data on, I tried to explore how statistics of diameters change among the period of ages. I plotted a box plot of diameters for each age group and compared them. As you can see, for each species, the median, upper and lower quantile grows as we go forward in age periods, meaning that there is a positive correlation between diameter and age of trees!
 
 ```{r}
 age_diamtr_rel <- van_tree_catAge %>%
