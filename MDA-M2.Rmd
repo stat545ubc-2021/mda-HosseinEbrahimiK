@@ -159,8 +159,31 @@ dist_dmtr_nghbr
 ```
 
 ```{r}
+van_tree_catAge <- vancouver_trees %>%
+  mutate(age = as.numeric(substring(Sys.Date(), 1, 4))-
+                 as.numeric(substring(date_planted, 1, 4))) %>%
+  mutate(age_cat = cut(age, 
+                breaks = c(0, 10, 20, 30, 40, Inf), 
+                labels = c("Youth","Mature","Middle Age","Senior","Ancient"))) %>%
+  select(tree_id, age, age_cat, everything())
 
+head(van_tree_catAge)
 ```
+
+```{r}
+age_diamtr_rel <- van_tree_catAge %>%
+  filter(genus_name %in% top_genus$genus_name) %>%
+  filter(0 < diameter & diameter < 100) %>%
+  filter(!is.na(diameter) & !is.na(age)) %>%
+  ggplot(aes(age_cat,  diameter)) +
+  geom_boxplot(aes(fill=age_cat)) +
+  theme(axis.text.x = element_text(color = "black", size=11, angle=30, vjust=.8, hjust=0.8)) +
+  scale_y_log10() +
+  facet_wrap(~ genus_name)
+
+age_diamtr_rel
+```
+
 
 
 <!----------------------------------------------------------------------------->
