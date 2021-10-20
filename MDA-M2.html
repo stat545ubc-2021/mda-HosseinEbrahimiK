@@ -402,10 +402,10 @@ age_diamtr_rel</code></pre>
 <h3>1.3 (2.5 points)</h3>
 <p>Based on the operations that you’ve completed, how much closer are you to answering your research questions? Think about what aspects of your research questions remain unclear. Can your research questions be refined, now that you’ve investigated your data a bit more? Which research questions are yielding interesting results?</p>
 <!------------------------- Write your answer here ---------------------------->
-<p>I think for the question 1, so far I get the background knowledge for it and I need to involve tree species information to be closer to the answer. I think adding one layer of tree species grouping in each year to the provided plot would reveal a lot of information about the question, but it need additional work in terms of plotting to better convey the results.</p>
-<p>With the operations we did (statistics of height and distributions), we can say there is not any specific differences for some type of trees like the PRUNUS among neighborhoods (3 modalities). But, I’d like to explore in more depth species like ACER. Another thing to consider is the amount of data that we have for each specie in each neighborhood. For example, if only we have handful number of trees in a neighborhood, it would be statistically significant we draw a conclusion based on those number of trees. And, that is why I tried narrow my focus on tree species that we have more data.</p>
-<p>For the question 3, we have unbalance number of observations for each class of curb, and it is problematic to draw a conclusion based on. There are some subtle differences in distributions of diameter for each class of curb in each neighborhood but that is not that high. Also, I think we should consider age of trees in diameter and only compare trees with the same age in further analysis. Because, older trees tend to have bigger diameters and this fact makes our analysis biased.</p>
-<p>Based on the provided box-plot, we’re confident to say that there is positive correlation between age of trees and their diameters for the explored tree species. But what I am curios is to fit a linear model on age versus diameter scatter-plot and see how coefficients differs from one to another and which one’s diameter grows more when its get older.</p>
+<p>I think for question 1, so far I get the background knowledge for it and I need to involve tree species information to be closer to the answer. I think adding one layer of tree species grouping in each year to the provided plot would reveal a lot of information about the question, but it needs additional work in terms of plotting to better convey the results.</p>
+<p>With the operations we did (statistics of height and distributions), we can say there are not any specific differences for some types of trees like the PRUNUS among neighborhoods (3 modalities). But, I’d like to explore in more depth species like ACER. Another thing to consider is the amount of data that we have for each species in each neighborhood. For example, if only we have a handful number of trees in a neighborhood, it would be statistically significant we draw a conclusion based on those numbers of trees. And, that is why I tried to narrow my focus on tree species that we have more data.</p>
+<p>For question 3, we have an unbalanced number of observations for each class of curb, and it is problematic to draw a conclusion based on. There are some subtle differences in distributions of diameter for each class of curb in each neighborhood but that is not that high. Also, I think we should consider the age of trees in diameter and only compare trees with the same age in further analysis. Because older trees tend to have bigger diameters and this fact makes our analysis biased.</p>
+<p>Based on the provided box plot, we’re confident to say that there is a positive correlation between the age of trees and their diameters for the explored tree species. But what I am curious about is to fit a linear model on age versus diameter scatter-plot and see how coefficients differ from one to another and which one’s diameter grows more when it gets older.</p>
 <!----------------------------------------------------------------------------->
 </div>
 </div>
@@ -423,7 +423,32 @@ age_diamtr_rel</code></pre>
 <h3>2.1 (2.5 points)</h3>
 <p>Based on the definition above, can you identify if your data is tidy or untidy? Go through all your columns, or if you have &gt;8 variables, just pick 8, and explain whether the data is untidy or tidy.</p>
 <!--------------------------- Start your work below --------------------------->
-<p>Since the data has more than 8 columns, I pick the first 8 for this task. <!-----------------------------------------------------------------------------></p>
+<p>Let’s start with looking at the data again and see if it is satisfied with our criteria of a tidy data.</p>
+<pre class="r"><code>glimpse(vancouver_trees)</code></pre>
+<pre><code>## Rows: 146,611
+## Columns: 20
+## $ tree_id            &lt;dbl&gt; 149556, 149563, 149579, 149590, 149604, 149616, 149…
+## $ civic_number       &lt;dbl&gt; 494, 450, 4994, 858, 5032, 585, 4909, 4925, 4969, 7…
+## $ std_street         &lt;chr&gt; &quot;W 58TH AV&quot;, &quot;W 58TH AV&quot;, &quot;WINDSOR ST&quot;, &quot;E 39TH AV&quot;…
+## $ genus_name         &lt;chr&gt; &quot;ULMUS&quot;, &quot;ZELKOVA&quot;, &quot;STYRAX&quot;, &quot;FRAXINUS&quot;, &quot;ACER&quot;, &quot;…
+## $ species_name       &lt;chr&gt; &quot;AMERICANA&quot;, &quot;SERRATA&quot;, &quot;JAPONICA&quot;, &quot;AMERICANA&quot;, &quot;C…
+## $ cultivar_name      &lt;chr&gt; &quot;BRANDON&quot;, NA, NA, &quot;AUTUMN APPLAUSE&quot;, NA, &quot;CHANTICL…
+## $ common_name        &lt;chr&gt; &quot;BRANDON ELM&quot;, &quot;JAPANESE ZELKOVA&quot;, &quot;JAPANESE SNOWBE…
+## $ assigned           &lt;chr&gt; &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;Y&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;…
+## $ root_barrier       &lt;chr&gt; &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;…
+## $ plant_area         &lt;chr&gt; &quot;N&quot;, &quot;N&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;B&quot;, &quot;6&quot;, &quot;6&quot;, &quot;3&quot;, &quot;3&quot;, &quot;…
+## $ on_street_block    &lt;dbl&gt; 400, 400, 4900, 800, 5000, 500, 4900, 4900, 4900, 7…
+## $ on_street          &lt;chr&gt; &quot;W 58TH AV&quot;, &quot;W 58TH AV&quot;, &quot;WINDSOR ST&quot;, &quot;E 39TH AV&quot;…
+## $ neighbourhood_name &lt;chr&gt; &quot;MARPOLE&quot;, &quot;MARPOLE&quot;, &quot;KENSINGTON-CEDAR COTTAGE&quot;, &quot;…
+## $ street_side_name   &lt;chr&gt; &quot;EVEN&quot;, &quot;EVEN&quot;, &quot;EVEN&quot;, &quot;EVEN&quot;, &quot;EVEN&quot;, &quot;ODD&quot;, &quot;ODD…
+## $ height_range_id    &lt;dbl&gt; 2, 4, 3, 4, 2, 2, 3, 3, 2, 2, 2, 5, 3, 2, 2, 2, 2, …
+## $ diameter           &lt;dbl&gt; 10.00, 10.00, 4.00, 18.00, 9.00, 5.00, 15.00, 14.00…
+## $ curb               &lt;chr&gt; &quot;N&quot;, &quot;N&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;…
+## $ date_planted       &lt;date&gt; 1999-01-13, 1996-05-31, 1993-11-22, 1996-04-29, 19…
+## $ longitude          &lt;dbl&gt; -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
+## $ latitude           &lt;dbl&gt; 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…</code></pre>
+<p>As we can see, each row is an observation unit of trees, and each variable is a record from them. As far as my research questions were, we didn’t need any re-formatting (wide to long and vice versa) to make our analysis easier and more efficient since we could put the names of our variables to the axis of plots. Another criteria that the data set meets is that each cell represents a value. So, our data is indeed tidy.</p>
+<!----------------------------------------------------------------------------->
 </div>
 <div id="points-4" class="section level3">
 <h3>2.2 (5 points)</h3>
@@ -431,6 +456,53 @@ age_diamtr_rel</code></pre>
 <p>If your data is untidy, then tidy it! Then, untidy it back to it’s original state.</p>
 <p>Be sure to explain your reasoning for this task. Show us the “before” and “after”.</p>
 <!--------------------------- Start your work below --------------------------->
+<p>First, start with untidy-ing data. For this purpose, I combine <code>diameter</code> and <code>height_range_id</code> variables together as <code>dimension_name</code> and their values to <code>dimension_value</code> to make a long version of data. As shown below, now the dimension_name variable is no longer a record of our data and it doesn’t represent a value, which makes it untidy! With the below dataset, answering questions 3 and 4 would be hard.</p>
+<pre class="r"><code>untidey_data &lt;- vancouver_trees %&gt;%
+  pivot_longer(
+    cols = c(diameter, height_range_id),
+    names_to = &quot;dimension_name&quot;,
+    values_to = &quot;dimension_value&quot;
+  ) %&gt;%
+  select(tree_id, dimension_name, dimension_value, everything())
+
+head(untidey_data)</code></pre>
+<pre><code>## # A tibble: 6 × 20
+##   tree_id dimension_name  dimension_value civic_number std_street genus_name
+##     &lt;dbl&gt; &lt;chr&gt;                     &lt;dbl&gt;        &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
+## 1  149556 diameter                     10          494 W 58TH AV  ULMUS     
+## 2  149556 height_range_id               2          494 W 58TH AV  ULMUS     
+## 3  149563 diameter                     10          450 W 58TH AV  ZELKOVA   
+## 4  149563 height_range_id               4          450 W 58TH AV  ZELKOVA   
+## 5  149579 diameter                      4         4994 WINDSOR ST STYRAX    
+## 6  149579 height_range_id               3         4994 WINDSOR ST STYRAX    
+## # … with 14 more variables: species_name &lt;chr&gt;, cultivar_name &lt;chr&gt;,
+## #   common_name &lt;chr&gt;, assigned &lt;chr&gt;, root_barrier &lt;chr&gt;, plant_area &lt;chr&gt;,
+## #   on_street_block &lt;dbl&gt;, on_street &lt;chr&gt;, neighbourhood_name &lt;chr&gt;,
+## #   street_side_name &lt;chr&gt;, curb &lt;chr&gt;, date_planted &lt;date&gt;, longitude &lt;dbl&gt;,
+## #   latitude &lt;dbl&gt;</code></pre>
+<p>Now let’s try to make the data back to tidy again!</p>
+<pre class="r"><code>tidy_data &lt;- untidey_data %&gt;%
+  pivot_wider(
+    id_cols = c(-dimension_name, -dimension_value),
+    names_from = dimension_name,
+    values_from = dimension_value) %&gt;%
+  select(tree_id, diameter, height_range_id, everything())
+head(tidy_data)</code></pre>
+<pre><code>## # A tibble: 6 × 20
+##   tree_id diameter height_range_id civic_number std_street genus_name
+##     &lt;dbl&gt;    &lt;dbl&gt;           &lt;dbl&gt;        &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     
+## 1  149556       10               2          494 W 58TH AV  ULMUS     
+## 2  149563       10               4          450 W 58TH AV  ZELKOVA   
+## 3  149579        4               3         4994 WINDSOR ST STYRAX    
+## 4  149590       18               4          858 E 39TH AV  FRAXINUS  
+## 5  149604        9               2         5032 WINDSOR ST ACER      
+## 6  149616        5               2          585 W 61ST AV  PYRUS     
+## # … with 14 more variables: species_name &lt;chr&gt;, cultivar_name &lt;chr&gt;,
+## #   common_name &lt;chr&gt;, assigned &lt;chr&gt;, root_barrier &lt;chr&gt;, plant_area &lt;chr&gt;,
+## #   on_street_block &lt;dbl&gt;, on_street &lt;chr&gt;, neighbourhood_name &lt;chr&gt;,
+## #   street_side_name &lt;chr&gt;, curb &lt;chr&gt;, date_planted &lt;date&gt;, longitude &lt;dbl&gt;,
+## #   latitude &lt;dbl&gt;</code></pre>
+<p>Our data is tidy again!</p>
 <!----------------------------------------------------------------------------->
 </div>
 <div id="points-5" class="section level3">
@@ -438,6 +510,7 @@ age_diamtr_rel</code></pre>
 <p>Now, you should be more familiar with your data, and also have made progress in answering your research questions. Based on your interest, and your analyses, pick 2 of the 4 research questions to continue your analysis in milestone 3, and explain your decision.</p>
 <p>Try to choose a version of your data that you think will be appropriate to answer these 2 questions in milestone 3. Use between 4 and 8 functions that we’ve covered so far (i.e. by filtering, cleaning, tidy’ing, dropping irrelvant columns, etc.).</p>
 <!--------------------------- Start your work below --------------------------->
+<p>Based on what I have done so far in research questions, I would like to continue my work on question 1 (trends in cultivated tree species in each neighborhood past five years) and question 4 (Age verus diameter across tree species). I think these questions are more likely to yield correct and interesting answers. Unbalanced classes of data in the two other questions are barriers to producing concrete results. Also, we somewhat reached the answers we wanted based on the summarized statistics and plots, and we could see that is going to yield interesting insights. Besides, I am excited to fit a linear model to explore the relation between diameter and age for each species in question 4. For question 1, I am curious about how to plot the information in a way to see trends in each neighborhood.</p>
 <!----------------------------------------------------------------------------->
 <p><em>When you are done, knit an <code>md</code> file. This is what we will mark! Make sure to open it and check that everything has knitted correctly before submitting your tagged release.</em></p>
 </div>
