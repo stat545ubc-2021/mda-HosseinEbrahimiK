@@ -1,6 +1,8 @@
 ---
 title: "Mini Data Analysis Milestone 2"
-output: html_document
+output:
+        md_document:
+            variant: markdown_github
 ---
 
 Begin by loading your data and the tidyverse package below: 
