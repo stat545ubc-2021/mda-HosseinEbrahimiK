@@ -17,7 +17,7 @@ This is a individual mini data analysis project for UBC course *[STAT 545A](http
  ## Project Files
  Files are separated into two folders based on the corresponding milestone. In each folder, you can find below files:
 1. *Github markdown (.md)*: [Milestone 1](/Milestone%201/MD1-M1.md), [Milestone 2](/Milestone%202/MDA-M2.md)
-2. *R markdown file (.rmd)*: [Milestone 1](/Milestone%201/MD1-M1.rmd), [Milestone 2](/Milestone%202/MDA-M2.rmd)
+2. *R markdown file (.rmd)*: [Milestone 1](/Milestone%201/MD1-M1.Rmd), [Milestone 2](/Milestone%202/MDA-M2.Rmd)
 3. *html file (.html)*: [Milestone 1](/Milestone%201/MD1-M1.html), [Milestone 2](/Milestone%202/MDA-M2.html)
 
 ## Contributers
