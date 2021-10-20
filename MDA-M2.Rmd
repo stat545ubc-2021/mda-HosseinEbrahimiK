@@ -3,14 +3,6 @@ title: "Mini Data Analysis Milestone 2"
 output: html_document
 ---
 
-*To complete this milestone, you can either edit [this `.rmd` file](https://raw.githubusercontent.com/UBC-STAT/stat545.stat.ubc.ca/master/content/mini-project/mini-project-2.Rmd) directly. Fill in the sections that are commented out with `<!--- start your work here--->`. When you are done, make sure to knit to an `.md` file by changing the output in the YAML header to `github_document`, before submitting a tagged release on canvas.*
-
-# Welcome back to your mini data analysis project!
-
-This time, we will explore more in depth the concept of *tidy data*, and hopefully investigate further into your research questions that you defined in milestone 1.
-
-**NOTE**: The main purpose of the mini data analysis is to integrate what you learn in class in an analysis. Although each milestone provides a framework for you to conduct your analysis, it's possible that you might find the instructions too rigid for your data set. If this is the case, you may deviate from the instructions -- just make sure you're demonstrating a wide range of tools and techniques taught in this class.
-
 Begin by loading your data and the tidyverse package below: 
 
 ```{r, message = FALSE}
@@ -18,30 +10,16 @@ suppressMessages(library(datateachr)) # <- might contain the data you picked!
 suppressMessages(library(tidyverse))
 ```
 
-# Learning Objectives
-
-By the end of this milestone, you should:
-
-+ Become familiar with manipulating and summarizing your data in tibbles using `dplyr` and `tidyr`, with a research question in mind.
-+ Understand what *tidy* data is, and how to create it. In milestone 3, we will explore when this might be useful.
-+ Generate a reproducible and clear report using R Markdown.
-+ Gain a greater understanding of how to use R to answer research questions about your data.
-
-**Things to keep in mind**
-
-+ Remember to document your code, be explicit about what you are doing, and write notes in this markdown document when you feel that context is required. Create your analysis as if someone else will be reading it! **There will be 2.5 points reserved for reproducibility, readability, and repo organization.**
-
-+ Before working on each task, you should always keep in mind the specific **research question** that you're trying to answer.
 
 # Task 1: Process and summarize your data (15 points)
-
-From milestone 1, you should have an idea of the basic structure of your dataset (e.g. number of rows and columns, class types, etc.). Here, we will start investigating your data more in-depth using various data manipulation functions. 
 
 ### 1.1 (2.5 points) 
 
 First, write out the 4 research questions you defined in milestone 1 were. This will guide your work through milestone 2:
 
 <!-------------------------- Start your work below ---------------------------->
+**Answer:**
+
 1. Which types of trees have been planted the most in the past five years in each neighborhood? In other words, is there a trend in cultivated tree species in each area?
 2. Is there any kind of relation between the height of trees (with the same type) and the neighborhood they have been planted in?
 3. Within each neighborhood, do trees with a curb around them tend to have smaller diameters (in terms of growth)?
@@ -70,6 +48,8 @@ Ensure that the output of each operation is printed!
 
 Make sure it's clear what research question you are doing each operation for!
 
+**Answer:**
+
 <!------------------------- Start your work below ----------------------------->
 #### Question 1: any trend in cultivated tree species in each area in past 5 years?
 
@@ -96,32 +76,34 @@ I choose **option 6 (logarithmic scale and formatting the axes labels)** for thi
 hist_tr_nghbr <- num_tr_nghbr %>%
   ggplot(aes(neighbourhood_name, n)) +
   geom_col(aes(fill=year_planted), position = "dodge") +
-  theme(axis.text.x = element_text(angle = 90)) +
   scale_y_log10() +
   xlab("Neighbourhood") +
-  ylab("Number of trees (log)")
+  ylab("Number of trees (log)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90))
 
 print(hist_tr_nghbr)
 ```
 
 #### Question 2: Any relation between the height of trees (with the same type) and the neighborhood?
 
-I choose **option 1: summary statistics** for this question. I calculated mean, min, max, median, and standard deviation of height across neighborhoods and tree species. It would be useful to know the mean and other statistics on the height when we're comparing it between two neighborhoods.
+I choose **option 1: summary statistics** for this question. I calculated mean, min, max, median, and standard deviation of height across neighborhoods and tree species. It would be useful to know the mean and other statistics on the height when we're comparing it between two neighborhoods to detect differences.
 
 ```{r}
 height_nghbr <- vancouver_trees %>%
+  # putting together species and neighborhood 
   group_by(neighbourhood_name, genus_name) %>%
-  summarise(mean_height= mean(height_range_id),
-            min_height = min(height_range_id),
-            max_height =  max(height_range_id),
-            median_height = median(height_range_id),
-            std_height = sd(height_range_id), .groups = 'drop')  #%>%
+  summarise(mean_height= mean(height_range_id),  # mean
+            min_height = min(height_range_id), # min
+            max_height =  max(height_range_id), # max
+            median_height = median(height_range_id), # median
+            std_height = sd(height_range_id), .groups = 'drop')
 
-  #filter(genus_name == "PRUNUS")
+  #filter(genus_name == "X") ** by adding this line you can see the differences in height statistics for a species across neighborhoods **
 
 height_nghbr
 ```
-Since we have many types of tree species in the data, I focused only on the family of trees instead of species and considered the top 3 that are most populated in all neighborhoods to investigate the question.  I plotted the density distribution of height of the tree families across neighborhoods (Implementing **options 7**).
+Since we have many types of tree species in the data, I focused only on the family of trees instead of species and considered the top 3 that are most populated in the dataset to investigate the question.  I plotted the density distribution of the height of the tree families across neighborhoods to explore whether there are any differences in the distributions among neighborhoods or not.
 
 ```{r}
 top_genus <- vancouver_trees %>%
@@ -134,33 +116,35 @@ height_dist_nghbr <- vancouver_trees %>%
   filter(genus_name %in% top_genus$genus_name) %>%
   group_by(genus_name) %>%
   ggplot(aes(height_range_id)) +
-  geom_density(aes(fill=genus_name), alpha = 0.5) +
-  facet_wrap(~ neighbourhood_name)
+  geom_density(aes(fill=genus_name), alpha = 0.4) +
+  facet_wrap(~ neighbourhood_name) + 
+  xlab("Height")
   
 height_dist_nghbr
 ```
 
 
-It seems the high distributions vary for each tree family across neighborhoods! As shown, the trees in the ACER family are higher in some neighborhoods than others. But, the distribution of PRUNUS does not vary much within neighborhoods.
+It seems distributions do not vary a lot for each tree family across neighborhoods!
 
 #### Question 3: curb affects diameters?
 
-For this research question, It would be good to know how many trees have curbs around them and how many do not. Because it would not be a fair comparison if we have a lot of observations from one population and few samples from another one. It turns out to be a case in our question! we do have fewer samples for ``curb=NO`` against ``curb=YES`` in each neighborhood. 
+For this research question, It would be good to know how many trees have curbs around them and how many do not. Because it would not be a fair comparison if we have a lot of observations from one population and few samples from another one. It turns out to be a case in our question! We do have fewer samples for ``curb=NO`` against ``curb=YES`` in each neighborhood. 
 
 ```{r}
 count_curbed <- vancouver_trees %>%
   group_by(neighbourhood_name, curb) %>%
-  tally()
+  tally() # counting  numbers of trees with and without curb in each neighborhood
 
 count_curbed
 ```
 
-I plotted the distribution of trees diameter with and without curbs in each neighborhood. so that it can help us identify does having a curb affects the tree's diameter. As shown in the plot, there is no significant difference between the distributions and their means  in most neighborhoods.
+I plotted the distribution of trees diameter with and without curbs in each neighborhood. So,  it can help us identify does having a curb affects the tree's diameter. As shown in the plot, there is no significant difference between the distributions and their means in most neighborhoods. Also, it is worth mentioning that numbers of positive (with a curb) and negative are not the same! If we had more negative samples, we could answer the question better.
 
 ```{r}
 means <- vancouver_trees %>%
   filter(0 < diameter & diameter < 50) %>%
   group_by(neighbourhood_name, curb) %>%
+  # calculating mean of diameter of trees in each neighborhood based on curb
   summarise(mean_dmtr = mean(diameter), .groups = 'drop')
 
 dist_dmtr_nghbr <- vancouver_trees %>%
@@ -177,12 +161,14 @@ dist_dmtr_nghbr
 
 #### Question 4: Age Vs diameter across tree species?
 
-I created a categorical variable, named age_cat, based on the age of trees. This new variable has five categories: ``Youth, Mature, Middle Age, Senior, Ancient``. The reason for creating this was to first, have better visualization of age against diameter as scatter plot for this question was not that informative, and second, investigate how diameter is distributed in each period of ages.
+I created a categorical variable named age_cat, based on the age of trees. This new variable has five categories: ``Youth, Mature, Middle Age, Senior, Ancient``. The reason for creating this was to first, have better visualization of age against diameter as scatter plot for this question was not that informative, and second, investigate how diameter is distributed in each period of age.
 
 ```{r}
 van_tree_catAge <- vancouver_trees %>%
+  # calculating age of trees with Sys.Date() and date_planted variable
   mutate(age = as.numeric(substring(Sys.Date(), 1, 4))-
                  as.numeric(substring(date_planted, 1, 4))) %>%
+  # creating categorical variable based on age!
   mutate(age_cat = cut(age, 
                 breaks = c(0, 10, 20, 30, 40, Inf), 
                 labels = c("Youth","Mature","Middle Age","Senior","Ancient"))) %>%
@@ -191,17 +177,22 @@ van_tree_catAge <- vancouver_trees %>%
 head(van_tree_catAge)
 ```
 
-For the top 3 tree species that we have the most data on, I tried to explore how statistics of diameters change among the period of ages. I plotted a box plot of diameters for each age group and compared them. As you can see, for each species, the median, upper and lower quantile grows as we go forward in age periods, meaning that there is a positive correlation between diameter and age of trees!
+For the top 3 tree species that we have the most data on, I tried to explore how statistics of diameters change among the period of ages. I plotted a box plot of diameters for each age group and compared them. As you can see, for each species, the median, upper and lower quantile grows as we go forward in age periods, meaning that there is a positive correlation between diameter and age of trees! Since we did not have any data in senior ages for FRAXINUS, its box plot looks like this.
 
 ```{r}
 age_diamtr_rel <- van_tree_catAge %>%
+  # filtering top 3 families of trees
   filter(genus_name %in% top_genus$genus_name) %>%
-  filter(0 < diameter & diameter < 100) %>%
+  # from the previous milestone, we have very few data points with diameter > 75
+  filter(0 < diameter & diameter < 75) %>%
+  # removing NA values
   filter(!is.na(diameter) & !is.na(age)) %>%
   ggplot(aes(age_cat,  diameter)) +
   geom_boxplot(aes(fill=age_cat)) +
   theme(axis.text.x = element_text(color = "black", size=11, angle=30, vjust=.8, hjust=0.8)) +
   scale_y_log10() +
+  xlab("Age Categories") +
+  ylab("Diameter (log)") +
   facet_wrap(~ genus_name)
 
 age_diamtr_rel
@@ -215,14 +206,16 @@ age_diamtr_rel
 
 Based on the operations that you've completed, how much closer are you to answering your research questions? Think about what aspects of your research questions remain unclear. Can your research questions be refined, now that you've investigated your data a bit more? Which research questions are yielding interesting results?
 
+**Answer:**
+
 <!------------------------- Write your answer here ---------------------------->
-I think for question 1, so far I get the background knowledge for it and I need to involve tree species information to be closer to the answer. I think adding one layer of tree species grouping in each year to the provided plot would reveal a lot of information about the question, but it needs additional work in terms of plotting to better convey the results.
+* I think for question 1, so far, I've got the background knowledge for it, and I need to involve tree species information to get closer to the answer. I think adding one layer of tree species to the provided plot would reveal much information about the question. But, it needs additional work in terms of plotting to convey the results better.
 
-With the operations we did (statistics of height and distributions), we can say there are not any specific differences for some types of trees like the PRUNUS among neighborhoods (3 modalities). But, I'd like to explore in more depth species like ACER. Another thing to consider is the amount of data that we have for each species in each neighborhood. For example,  if only we have a handful number of trees in a neighborhood, it would be statistically significant we draw a conclusion based on those numbers of trees. And,  that is why I tried to narrow my focus on tree species that we have more data.
+* With the operations we did (statistics of height and distributions), we can say there are no specific differences for some types of trees like the PRUNUS among neighborhoods (3 modalities). But, I'd like to explore in more depth species like ACER. Another thing to consider is the amount of data that we have for each species in each neighborhood. For example,  if only we had a handful of trees in an area, it would not be statistically significant to draw a conclusion based on those numbers of trees. That is why I tried to narrow my focus to tree species that we have more data on (ACER, PRUNUS, and Fraxinus).
 
-For question 3, we have an unbalanced number of observations for each class of curb, and it is problematic to draw a conclusion based on. There are some subtle differences in distributions of diameter for each class of curb in each neighborhood but that is not that high. Also, I think we should consider the age of trees in diameter and only compare trees with the same age in further analysis. Because older trees tend to have bigger diameters and this fact makes our analysis biased.
+* For question 3, we have an unbalanced number of observations for each curb class, which makes it hard to have accurate analysis. There are differences in diameter distributions and their means for each type of curb in each neighborhood, but they are not significant. Also, I think we should consider the age of trees and only compare trees within the same age in further analysis. Because older trees tend to have bigger diameters and this fact has made our analysis biased.
 
-Based on the provided box plot, we're confident to say that there is a positive correlation between the age of trees and their diameters for the explored tree species. But what I am curious about is to fit a linear model on age versus diameter scatter-plot and see how coefficients differ from one to another and which one's diameter grows more when it gets older.
+* Based on the provided box plot, we're confident to say that there is a positive correlation between the age of trees and their diameters for the explored tree species. But what I am curious about is to fit a linear model on age versus diameter scatter-plot and see how coefficients differ from one to another for tree species and which one's diameter grows more when it gets older.
 
 <!----------------------------------------------------------------------------->
 
@@ -243,14 +236,15 @@ A reminder of the definition of *tidy* data:
 Based on the definition above, can you identify if your data is tidy or untidy? Go through all your columns, or if you have >8 variables, just pick 8, and explain whether the data is untidy or tidy.
 
 <!--------------------------- Start your work below --------------------------->
+**Answer:**
 
-Let's start with looking at the data again  and  see if it is satisfied with our criteria of a tidy data.
+Let's start with looking at the data again and see if it is satisfied with our criteria of tidy data.
 
 ```{r}
 glimpse(vancouver_trees)
 ```
 
-As we can see, each row is an observation unit of trees, and each variable is a record from them. As far as my research questions were, we didn't need any re-formatting (wide to long and vice versa) to make our analysis easier and more efficient since we could put the names of our variables to the axis of plots. Another criteria that the data set meets is that each cell represents a value. So, our data is indeed tidy.
+As we can see, each row is an observation unit of trees, and each variable is a record from them. As far as my research questions were, we didn't need any re-formatting (wide to long and vice versa) to make our analysis more straightforward and more efficient since we could put the names of our variables to the axis of plots. Another criteria that the dataset meets is that each cell represents a value. So, our data is indeed tidy.
 
 <!----------------------------------------------------------------------------->
 
@@ -263,8 +257,9 @@ If your data is untidy, then tidy it! Then, untidy it back to it's original stat
 Be sure to explain your reasoning for this task. Show us the "before" and "after".
 
 <!--------------------------- Start your work below --------------------------->
+**Answer:**
 
-First, start with untidy-ing data. For this purpose, I combine ``diameter`` and ``height_range_id`` variables together as ``dimension_name`` and their values to ``dimension_value`` to make a long version of data. As shown below, now the dimension_name variable is no longer a record of our data and it doesn't represent a value, which makes it untidy! With the below dataset, answering questions 3 and 4 would be hard.
+First, start with untidy-ing data. For this purpose, I combine ``diameter`` and ``height_range_id`` variables as ``dimension_name`` and their values to ``dimension_value`` to make a long data version. As shown below, now the dimension_name variable is no longer a record of our data and doesn't represent a value, making it untidy! With the below dataset, answering questions 3 and 4 would be hard.
 
 ```{r}
 untidey_data <- vancouver_trees %>%
@@ -301,8 +296,33 @@ Now, you should be more familiar with your data, and also have made progress in 
 Try to choose a version of your data that you think will be appropriate to answer these 2 questions in milestone 3. Use between 4 and 8 functions that we've covered so far (i.e. by filtering, cleaning, tidy'ing, dropping irrelvant columns, etc.). 
 
 <!--------------------------- Start your work below --------------------------->
+**Answer:**
 
-Based on what I have done so far in research questions, I would like to continue my work on question 1 (trends in cultivated tree species in each neighborhood past five years) and question 4 (Age verus diameter across tree species). I think these questions are more likely to yield correct and interesting answers. Unbalanced classes of data in the two other questions are barriers to producing concrete results. Also, we somewhat reached the answers we wanted based on the summarized statistics and plots, and we could see that is not going to yield interesting insights. Besides, I am excited to fit a linear model to explore the relation between diameter and age for each species in question 4. For question 1, I am curious about how to plot the information in a way to see trends in each neighborhood.
+Based on what I have done in research questions, I would like to continue my work on question 1 (trends in cultivated tree species in each neighborhood past five years) and question 4 (Age versus diameter across tree species). I think these questions are more likely to yield correct and interesting answers. Unbalanced classes of data in the two other questions are barriers to producing concrete results. Also, we somewhat reached the answers we wanted based on the summarized statistics and plots. Besides, I am excited to explore the relation between diameter and age for each species in question 4 by fitting linear models and comparing the coefficients. For question 1, I am curious about how to plot the information in a way to see trends in each neighborhood.
+
+```{r}
+vancouver_trees_v2 <- vancouver_trees %>%
+  # Only selecting the variables we need for the next milestone
+  select(tree_id, genus_name, neighbourhood_name, diameter, date_planted) %>%
+  # Filtering outlier diameters
+  filter(diameter > 0 & diameter < 75) %>%
+  # Removing NA records
+  filter(!is.na(diameter) & !is.na(date_planted) & !is.na(diameter)) %>%
+  # Creating year_planted based on date_planted
+  mutate(year_planted = as.numeric(substring(date_planted, 1, 4))) %>%
+  # Calculating age of each tree
+  mutate(age = as.numeric(substring(Sys.Date(), 1, 4)) - year_planted) %>%
+  # Removing date_planted variable
+  select(tree_id, genus_name, neighbourhood_name, diameter, year_planted, age)%>%
+  group_by(neighbourhood_name, year_planted) %>%
+  # Counting number of trees in each neighborhood as we need those numbers of question number 1
+  mutate(n_nghbr = n()) %>%
+  ungroup()
+  
+  
+head(vancouver_trees_v2)
+```
+
 
 <!----------------------------------------------------------------------------->
 
