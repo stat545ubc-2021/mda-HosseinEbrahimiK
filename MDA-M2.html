@@ -277,7 +277,9 @@ print(hist_tr_nghbr)</code></pre>
             min_height = min(height_range_id),
             max_height =  max(height_range_id),
             median_height = median(height_range_id),
-            std_height = sd(height_range_id), .groups = &#39;drop&#39;)
+            std_height = sd(height_range_id), .groups = &#39;drop&#39;)  #%&gt;%
+
+  #filter(genus_name == &quot;PRUNUS&quot;)
 
 height_nghbr</code></pre>
 <pre><code>## # A tibble: 1,303 × 7
@@ -400,6 +402,10 @@ age_diamtr_rel</code></pre>
 <h3>1.3 (2.5 points)</h3>
 <p>Based on the operations that you’ve completed, how much closer are you to answering your research questions? Think about what aspects of your research questions remain unclear. Can your research questions be refined, now that you’ve investigated your data a bit more? Which research questions are yielding interesting results?</p>
 <!------------------------- Write your answer here ---------------------------->
+<p>I think for the question 1, so far I get the background knowledge for it and I need to involve tree species information to be closer to the answer. I think adding one layer of tree species grouping in each year to the provided plot would reveal a lot of information about the question, but it need additional work in terms of plotting to better convey the results.</p>
+<p>With the operations we did (statistics of height and distributions), we can say there is not any specific differences for some type of trees like the PRUNUS among neighborhoods (3 modalities). But, I’d like to explore in more depth species like ACER. Another thing to consider is the amount of data that we have for each specie in each neighborhood. For example, if only we have handful number of trees in a neighborhood, it would be statistically significant we draw a conclusion based on those number of trees. And, that is why I tried narrow my focus on tree species that we have more data.</p>
+<p>For the question 3, we have unbalance number of observations for each class of curb, and it is problematic to draw a conclusion based on. There are some subtle differences in distributions of diameter for each class of curb in each neighborhood but that is not that high. Also, I think we should consider age of trees in diameter and only compare trees with the same age in further analysis. Because, older trees tend to have bigger diameters and this fact makes our analysis biased.</p>
+<p>Based on the provided box-plot, we’re confident to say that there is positive correlation between age of trees and their diameters for the explored tree species. But what I am curios is to fit a linear model on age versus diameter scatter-plot and see how coefficients differs from one to another and which one’s diameter grows more when its get older.</p>
 <!----------------------------------------------------------------------------->
 </div>
 </div>
@@ -417,7 +423,7 @@ age_diamtr_rel</code></pre>
 <h3>2.1 (2.5 points)</h3>
 <p>Based on the definition above, can you identify if your data is tidy or untidy? Go through all your columns, or if you have &gt;8 variables, just pick 8, and explain whether the data is untidy or tidy.</p>
 <!--------------------------- Start your work below --------------------------->
-<!----------------------------------------------------------------------------->
+<p>Since the data has more than 8 columns, I pick the first 8 for this task. <!-----------------------------------------------------------------------------></p>
 </div>
 <div id="points-4" class="section level3">
 <h3>2.2 (5 points)</h3>
