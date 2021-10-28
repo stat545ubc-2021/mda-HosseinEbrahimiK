@@ -85,7 +85,7 @@ Place the code for your plot below.
 **NOTE**: Below I included a modified code for one of the plots in
 milestone 2. The original code was handling the orders of a categorical
 variable without me noticing it. I changed the code in a way that orders
-are not correct automatically.
+are not automatically correct.
 
 ``` r
 top_genus <- vancouver_trees %>%
@@ -236,6 +236,9 @@ specifics in STAT 545.
 
 <!-------------------------- Start your work below ---------------------------->
 
+First, let’s try to fit a linear model to diameter \~ age for all trees
+and see if there is any correlation between them overall.
+
 ``` r
 diameter_age_model <- lm(diameter ~ age, data = age_diamtr)
 
@@ -250,6 +253,60 @@ print(diameter_age_model)
     ## (Intercept)          age  
     ##      0.8880       0.2843
 
+The estimated coefficient for the age variable is 0.2843, which
+positive. So, overall there is a positive correlation between the
+diameter and age.
+
+Now let’s see how this relationship changes for different types of
+trees— the larger the coefficient value, the stronger relation between
+age and diameter.
+
+``` r
+models <- age_diamtr %>%
+  group_by(genus_name) %>%
+  do(model = lm(diameter ~ age, data = .))
+
+print(models$genus_name)
+```
+
+    ## [1] "ACER"     "FRAXINUS" "PRUNUS"
+
+``` r
+print(models$model)
+```
+
+    ## [[1]]
+    ## 
+    ## Call:
+    ## lm(formula = diameter ~ age, data = .)
+    ## 
+    ## Coefficients:
+    ## (Intercept)          age  
+    ##      1.2909       0.2535  
+    ## 
+    ## 
+    ## [[2]]
+    ## 
+    ## Call:
+    ## lm(formula = diameter ~ age, data = .)
+    ## 
+    ## Coefficients:
+    ## (Intercept)          age  
+    ##     -1.4231       0.3907  
+    ## 
+    ## 
+    ## [[3]]
+    ## 
+    ## Call:
+    ## lm(formula = diameter ~ age, data = .)
+    ## 
+    ## Coefficients:
+    ## (Intercept)          age  
+    ##      0.5129       0.3314
+
+As shown above, each type of tree has a different coefficient value,
+meaning that some of them grow faster as they age, such as FRAXINUS,
+which has the largest coefficient.
 <!----------------------------------------------------------------------------->
 
 ## 2.2 (5 points)
@@ -268,9 +325,7 @@ Y, or a single value like a regression coefficient or a p-value.
 
 <!-------------------------- Start your work below ---------------------------->
 
-I am looking for the estimated coefficient for age variable, since a
-positive value indicates there is a correlation between diameter and age
-of a tree.
+I am looking for the estimated coefficient for the age variable.
 
 ``` r
 broom::tidy(diameter_age_model)
@@ -282,8 +337,8 @@ broom::tidy(diameter_age_model)
     ## 1 (Intercept)    0.888   0.0452       19.7 1.31e-85
     ## 2 age            0.284   0.00244     116.  0
 
-As shown, the estimated coefficient for age variable could be found in
-the estimate column at the age row, which is 0.2843083.
+As shown, the estimated coefficient for the age variable could be found
+in the estimate column at the age row, which is 0.2843083.
 
 <!----------------------------------------------------------------------------->
 

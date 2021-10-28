@@ -52,7 +52,7 @@ But first, tasks 1 and 2 below ask you to modify a plot you made in a previous m
 
 <!-------------------------- Start your work below ---------------------------->
 
-**NOTE**: Below I included a modified code for one of the plots in milestone 2. The original code was handling the orders of a categorical variable without me noticing it. I changed the code in a way that orders are not correct automatically.
+**NOTE**: Below I included a modified code for one of the plots in milestone 2. The original code was handling the orders of a categorical variable without me noticing it. I changed the code in a way that orders are not automatically correct.
 
 ```{r}
 top_genus <- vancouver_trees %>%
@@ -181,7 +181,7 @@ print(diameter_age_model)
 ```
 The estimated coefficient for the age variable is 0.2843, which positive. So, overall there is a positive correlation between the diameter and age.
 
-Now let's see how this relation changes for different type of tree. The bigger the age coefficient value, the stronger relation between age and diameter.
+Now let's see how this relationship changes for different types of trees— the larger the coefficient value, the stronger relation between age and diameter.
 
 ```{r}
 models <- age_diamtr %>%
@@ -192,7 +192,7 @@ print(models$genus_name)
 print(models$model)
 ```
 
-As shown above, 
+As shown above, each type of tree has a different coefficient value, meaning that some of them grow faster as they age, such as FRAXINUS, which has the largest coefficient.
 <!----------------------------------------------------------------------------->
 
 ## 2.2 (5 points)
