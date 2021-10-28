@@ -114,7 +114,8 @@ Now, choose two of the following tasks.
 
 **Task Number**: 1
 
-As can be seen in the above plot, the order on the x-axis, [Mature, Middle age, Senior, Youth], is not correct. Because we want to see how diameter changes as the age of trees progress from Youth to senior and find out if there is any correlation between them. So, I reordered the age category from ``Youth `` to ``Senior`` with the ``fct_relevel`` function of the `forcats` package.
+As can be seen in the above plot, the order on the x-axis, [Mature, Middle age, Senior, Youth], is not correct. Because we want to see how diameter changes as the age of trees progress from Youth to senior and find out if there is any correlation between them. So, I reordered the age category from ``Youth `` to ``Senior`` with the ``fct_relevel()`` function of the `forcats` package.
+
 ```{r}
 age_diamtr_plt <- age_diamtr %>%
   mutate(age_cat = fct_relevel(age_cat, 
@@ -134,19 +135,23 @@ age_diamtr_plt
 
 <!----------------------------------------------------------------------------->
 
-
 <!-------------------------- Start your work below ---------------------------->
 
 **Task Number**: 3
 
 ```{r}
 
+van_tree_wAge <- vancouver_trees %>%
+  # calculating age of trees with lubridate library
+  mutate(age = lubridate::year(Sys.Date()) - lubridate::year(date_planted)) %>%
+  select(tree_id, date_planted, age, everything())
+
+head(van_tree_wAge)
 ```
 
+I've been extracting the age of trees in many different ways for various tasks so far, like using ``substring()`` and ``as.numeric()``, and none of them was this clean in terms of coding and reading. The `lubridate::year()` extracts the year from a date format and turns it to a numeric value, all things we wanted in a single function! We need the age of trees in order to investigate their relationship with the diameter for the next Modeling exercise.
 
 <!----------------------------------------------------------------------------->
-
-    
 
 # Exercise 2: Modelling
 
@@ -176,16 +181,17 @@ Fit a model or run a hypothesis test that provides insight on this variable with
 First, let's try to fit a linear model to diameter ~ age for all trees and see if there is any correlation between them overall.
 
 ```{r}
-diameter_age_model <- lm(diameter ~ age, data = age_diamtr)
+diameter_age_model <- lm(diameter ~ age, data = van_tree_wAge)
 
 print(diameter_age_model)
 ```
-The estimated coefficient for the age variable is 0.2843, which positive. So, overall there is a positive correlation between the diameter and age.
+The estimated coefficient for the age variable is 0.2802, which positive. So, overall there is a positive correlation between the diameter and age.
 
-Now let's see how this relationship changes for different types of trees— the larger the coefficient value, the stronger relation between age and diameter.
+Now let's see how this relationship changes for the top 3 types of trees— the larger the coefficient value, the stronger relation between age and diameter for that specific type of tree.
 
 ```{r}
 models <- age_diamtr %>%
+  filter(genus_name %in% top_genus$genus_name) %>%
   group_by(genus_name) %>%
   do(model = lm(diameter ~ age, data = .))
 
@@ -212,7 +218,7 @@ I am looking for the estimated coefficient for the age variable.
 broom::tidy(diameter_age_model)
 ```
 
-As shown, the estimated coefficient for the age variable could be found in the estimate column at the age row, which is 0.2843083.
+As shown, the estimated coefficient for the age variable could be found in the estimate column at the age row, which is 0.28.
 
 <!----------------------------------------------------------------------------->
 
