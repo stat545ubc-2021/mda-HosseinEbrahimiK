@@ -176,8 +176,8 @@ As can be seen in the above plot, the order on the x-axis, \[Mature,
 Middle age, Senior, Youth\], is not correct. Because we want to see how
 diameter changes as the age of trees progress from Youth to senior and
 find out if there is any correlation between them. So, I reordered the
-age category from `Youth` to `Senior` with the `fct_relevel` function of
-the `forcats` package.
+age category from `Youth` to `Senior` with the `fct_relevel()` function
+of the `forcats` package.
 
 ``` r
 age_diamtr_plt <- age_diamtr %>%
@@ -201,6 +201,38 @@ age_diamtr_plt
 <!-------------------------- Start your work below ---------------------------->
 
 **Task Number**: 3
+
+``` r
+van_tree_wAge <- vancouver_trees %>%
+  # calculating age of trees with lubridate library
+  mutate(age = lubridate::year(Sys.Date()) - lubridate::year(date_planted)) %>%
+  select(tree_id, date_planted, age, everything())
+
+head(van_tree_wAge)
+```
+
+    ## # A tibble: 6 × 21
+    ##   tree_id date_planted   age civic_number std_street genus_name species_name
+    ##     <dbl> <date>       <dbl>        <dbl> <chr>      <chr>      <chr>       
+    ## 1  149556 1999-01-13      22          494 W 58TH AV  ULMUS      AMERICANA   
+    ## 2  149563 1996-05-31      25          450 W 58TH AV  ZELKOVA    SERRATA     
+    ## 3  149579 1993-11-22      28         4994 WINDSOR ST STYRAX     JAPONICA    
+    ## 4  149590 1996-04-29      25          858 E 39TH AV  FRAXINUS   AMERICANA   
+    ## 5  149604 1993-12-17      28         5032 WINDSOR ST ACER       CAMPESTRE   
+    ## 6  149616 NA              NA          585 W 61ST AV  PYRUS      CALLERYANA  
+    ## # … with 14 more variables: cultivar_name <chr>, common_name <chr>,
+    ## #   assigned <chr>, root_barrier <chr>, plant_area <chr>,
+    ## #   on_street_block <dbl>, on_street <chr>, neighbourhood_name <chr>,
+    ## #   street_side_name <chr>, height_range_id <dbl>, diameter <dbl>, curb <chr>,
+    ## #   longitude <dbl>, latitude <dbl>
+
+I’ve been extracting the age of trees in many different ways for various
+tasks so far, like using `substring()` and `as.numeric()`, and none of
+them was this clean in terms of coding and reading. The
+`lubridate::year()` extracts the year from a date format and turns it to
+a numeric value, all things we wanted in a single function! We need the
+age of trees in order to investigate their relationship with the
+diameter for the next Modeling exercise.
 
 <!----------------------------------------------------------------------------->
 
@@ -247,29 +279,30 @@ First, let’s try to fit a linear model to diameter \~ age for all trees
 and see if there is any correlation between them overall.
 
 ``` r
-diameter_age_model <- lm(diameter ~ age, data = age_diamtr)
+diameter_age_model <- lm(diameter ~ age, data = van_tree_wAge)
 
 print(diameter_age_model)
 ```
 
     ## 
     ## Call:
-    ## lm(formula = diameter ~ age, data = age_diamtr)
+    ## lm(formula = diameter ~ age, data = van_tree_wAge)
     ## 
     ## Coefficients:
     ## (Intercept)          age  
-    ##      0.8880       0.2843
+    ##      0.9052       0.2802
 
-The estimated coefficient for the age variable is 0.2843, which
+The estimated coefficient for the age variable is 0.2802, which
 positive. So, overall there is a positive correlation between the
 diameter and age.
 
-Now let’s see how this relationship changes for different types of
+Now let’s see how this relationship changes for the top 3 types of
 trees— the larger the coefficient value, the stronger relation between
-age and diameter.
+age and diameter for that specific type of tree.
 
 ``` r
 models <- age_diamtr %>%
+  filter(genus_name %in% top_genus$genus_name) %>%
   group_by(genus_name) %>%
   do(model = lm(diameter ~ age, data = .))
 
@@ -339,13 +372,13 @@ broom::tidy(diameter_age_model)
 ```
 
     ## # A tibble: 2 × 5
-    ##   term        estimate std.error statistic  p.value
-    ##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
-    ## 1 (Intercept)    0.888   0.0452       19.7 1.31e-85
-    ## 2 age            0.284   0.00244     116.  0
+    ##   term        estimate std.error statistic   p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
+    ## 1 (Intercept)    0.905   0.0412       22.0 1.40e-106
+    ## 2 age            0.280   0.00221     127.  0
 
 As shown, the estimated coefficient for the age variable could be found
-in the estimate column at the age row, which is 0.2843083.
+in the estimate column at the age row, which is 0.28.
 
 <!----------------------------------------------------------------------------->
 
@@ -421,11 +454,11 @@ print(loaded_model)
 
     ## 
     ## Call:
-    ## lm(formula = diameter ~ age, data = age_diamtr)
+    ## lm(formula = diameter ~ age, data = van_tree_wAge)
     ## 
     ## Coefficients:
     ## (Intercept)          age  
-    ##      0.8880       0.2843
+    ##      0.9052       0.2802
 
 <!----------------------------------------------------------------------------->
 
