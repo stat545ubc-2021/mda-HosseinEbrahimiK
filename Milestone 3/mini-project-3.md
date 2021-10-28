@@ -237,41 +237,18 @@ specifics in STAT 545.
 <!-------------------------- Start your work below ---------------------------->
 
 ``` r
-diameter_age_modeling = age_diamtr %>%
-  group_by(genus_name) %>%
-  do(model = lm(diameter ~ age, data = .))
+diameter_age_model <- lm(diameter ~ age, data = age_diamtr)
 
-diameter_age_modeling$model
+print(diameter_age_model)
 ```
 
-    ## [[1]]
     ## 
     ## Call:
-    ## lm(formula = diameter ~ age, data = .)
+    ## lm(formula = diameter ~ age, data = age_diamtr)
     ## 
     ## Coefficients:
     ## (Intercept)          age  
-    ##      1.2909       0.2535  
-    ## 
-    ## 
-    ## [[2]]
-    ## 
-    ## Call:
-    ## lm(formula = diameter ~ age, data = .)
-    ## 
-    ## Coefficients:
-    ## (Intercept)          age  
-    ##     -1.4231       0.3907  
-    ## 
-    ## 
-    ## [[3]]
-    ## 
-    ## Call:
-    ## lm(formula = diameter ~ age, data = .)
-    ## 
-    ## Coefficients:
-    ## (Intercept)          age  
-    ##      0.5129       0.3314
+    ##      0.8880       0.2843
 
 <!----------------------------------------------------------------------------->
 
@@ -290,6 +267,24 @@ Y, or a single value like a regression coefficient or a p-value.
     which broom function is not compatible.
 
 <!-------------------------- Start your work below ---------------------------->
+
+I am looking for the estimated coefficient for age variable, since a
+positive value indicates there is a correlation between diameter and age
+of a tree.
+
+``` r
+broom::tidy(diameter_age_model)
+```
+
+    ## # A tibble: 2 × 5
+    ##   term        estimate std.error statistic  p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
+    ## 1 (Intercept)    0.888   0.0452       19.7 1.31e-85
+    ## 2 age            0.284   0.00244     116.  0
+
+As shown, the estimated coefficient for age variable could be found in
+the estimate column at the age row, which is 0.2843083.
+
 <!----------------------------------------------------------------------------->
 
 # Exercise 3: Reading and writing data
@@ -312,6 +307,37 @@ function.
     file, and remake it simply by knitting this Rmd file.
 
 <!-------------------------- Start your work below ---------------------------->
+
+``` r
+num_tr_nghbr <- vancouver_trees %>%
+  # creating a variable year when trees are planted
+  mutate(year_planted = as.character(substring(date_planted, 1, 4))) %>%
+  # grouping trees by their neighborhood & year
+  group_by(neighbourhood_name, year_planted) %>%
+  # trees has planted in the pas 10 years
+  filter(as.numeric(substring(Sys.Date(), 1, 4)) - 
+          as.numeric(year_planted) <= 5) %>%
+  # counting number of trees per year in each neighborhood
+  tally()
+
+head(num_tr_nghbr)
+```
+
+    ## # A tibble: 6 × 3
+    ## # Groups:   neighbourhood_name [2]
+    ##   neighbourhood_name year_planted     n
+    ##   <chr>              <chr>        <int>
+    ## 1 ARBUTUS-RIDGE      2016            51
+    ## 2 ARBUTUS-RIDGE      2017            58
+    ## 3 ARBUTUS-RIDGE      2018            57
+    ## 4 ARBUTUS-RIDGE      2019            43
+    ## 5 DOWNTOWN           2016            29
+    ## 6 DOWNTOWN           2017            42
+
+``` r
+write_csv(num_tr_nghbr, here::here("Output", "num_tree_nghbr.csv"))
+```
+
 <!----------------------------------------------------------------------------->
 
 ## 3.2 (5 points)
@@ -324,6 +350,21 @@ folder. Use the functions `saveRDS()` and `readRDS()`.
     here.
 
 <!-------------------------- Start your work below ---------------------------->
+
+``` r
+saveRDS(diameter_age_model, here::here("Output", "diameter_age_model.rds"))
+loaded_model <- readRDS(here::here("Output", "diameter_age_model.rds"))
+print(loaded_model)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = diameter ~ age, data = age_diamtr)
+    ## 
+    ## Coefficients:
+    ## (Intercept)          age  
+    ##      0.8880       0.2843
+
 <!----------------------------------------------------------------------------->
 
 # Tidy Repository

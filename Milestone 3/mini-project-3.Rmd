@@ -172,12 +172,27 @@ Fit a model or run a hypothesis test that provides insight on this variable with
 
 <!-------------------------- Start your work below ---------------------------->
 
+First, let's try to fit a linear model to diameter ~ age for all trees and see if there is any correlation between them overall.
+
 ```{r}
 diameter_age_model <- lm(diameter ~ age, data = age_diamtr)
 
 print(diameter_age_model)
 ```
+The estimated coefficient for the age variable is 0.2843, which positive. So, overall there is a positive correlation between the diameter and age.
 
+Now let's see how this relation changes for different type of tree. The bigger the age coefficient value, the stronger relation between age and diameter.
+
+```{r}
+models <- age_diamtr %>%
+  group_by(genus_name) %>%
+  do(model = lm(diameter ~ age, data = .))
+
+print(models$genus_name)
+print(models$model)
+```
+
+As shown above, 
 <!----------------------------------------------------------------------------->
 
 ## 2.2 (5 points)
@@ -190,9 +205,13 @@ Produce something relevant from your fitted model: either predictions on Y, or a
   
 <!-------------------------- Start your work below ---------------------------->
 
+I am looking for the estimated coefficient for the age variable.
+
 ```{r}
 broom::tidy(diameter_age_model)
 ```
+
+As shown, the estimated coefficient for the age variable could be found in the estimate column at the age row, which is 0.2843083.
 
 <!----------------------------------------------------------------------------->
 
