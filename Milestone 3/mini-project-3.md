@@ -177,15 +177,22 @@ Now, choose two of the following tasks.
 As can be seen in the above plot, the order on the x-axis, \[Mature,
 Middle age, Senior, Youth\], is not correct. Because we want to see how
 diameter changes as the age of trees progress from youth to senior and
-find out if there is any correlation between them. So, I reordered the
-age category from `Youth` to `Senior` with the `fct_relevel()` function
-of the `forcats` package.
+find out if there is any correlation between them. So, we should reorder
+the age category from `Youth` to `Senior`. It can be done with the
+`fct_relevel()` function of the `forcats` package. Or alternatively, we
+can use `fct_reorder()` to reorder the `age_cat` by `mean()` of `age`
+variable. I prefer the latter because it does not need to change the
+order by hand!
 
 ``` r
 age_diamtr_plt <- age_diamtr %>%
-  mutate(age_cat = fct_relevel(age_cat, 
-            "Youth", "Mature", "Middle Age", 
-            "Senior")) %>%
+  
+  mutate(age_cat = fct_reorder(age_cat, age, mean)) %>%
+  
+  # We can use the below line as well:
+  
+  # mutate(age_cat = fct_relevel(age_cat, "Youth", "Mature", "Middle Age","Senior")) %>%
+  
   ggplot(aes(age_cat,  diameter)) +
   geom_boxplot(aes(fill=age_cat)) +
   theme(axis.text.x = element_text(color = "black", size=11, angle=30, vjust=.8, hjust=0.8)) +
