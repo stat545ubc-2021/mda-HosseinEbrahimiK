@@ -1,7 +1,0 @@
-"0",""
-"0","van_tree_wAge <- vancouver_trees %>%"
-"0","  # calculating age of trees with lubridate library"
-"0","  mutate(age = lubridate::year(Sys.Date()) - lubridate::year(date_planted)) %>%"
-"0","  select(tree_id, date_planted, age, everything())"
-"0",""
-"0","head(van_tree_wAge)"
