@@ -176,7 +176,7 @@ Now, choose two of the following tasks.
 
 As can be seen in the above plot, the order on the x-axis, \[Mature,
 Middle age, Senior, Youth\], is not correct. Because we want to see how
-diameter changes as the age of trees progress from Youth to senior and
+diameter changes as the age of trees progress from youth to senior and
 find out if there is any correlation between them. So, I reordered the
 age category from `Youth` to `Senior` with the `fct_relevel()` function
 of the `forcats` package.
