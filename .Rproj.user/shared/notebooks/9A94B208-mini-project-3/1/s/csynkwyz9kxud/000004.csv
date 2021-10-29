@@ -1,0 +1,2 @@
+"0","# Summary of the model"
+"0","broom::tidy(diameter_age_model)"
