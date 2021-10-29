@@ -82,10 +82,12 @@ Place the code for your plot below.
 
 <!-------------------------- Start your work below ---------------------------->
 
-**NOTE**: Below I included a modified code for one of the plots in
-milestone 2. The original code was handling the orders of a categorical
-variable without me noticing it. I changed the code in a way that orders
-are not automatically correct.
+**Answer**:
+
+Below I included a modified code for one of the plots in milestone 2.
+The original code was handling the orders of a categorical variable
+without me noticing it. I changed the code in a way that orders are not
+automatically correct.
 
 ``` r
 top_genus <- vancouver_trees %>%
@@ -202,6 +204,14 @@ age_diamtr_plt
 
 **Task Number**: 3
 
+I’ve been extracting the age of trees in many different ways for various
+tasks so far, like using `substring()` and `as.numeric()`, and none of
+them was this clean in terms of coding and reading. The
+`lubridate::year()` extracts the year from a date format and turns it to
+a numeric value, all things we wanted in a single function! We need the
+age of trees in order to investigate their relationship with the
+diameter for the next Modeling exercise.
+
 ``` r
 van_tree_wAge <- vancouver_trees %>%
   # calculating age of trees with lubridate library
@@ -225,14 +235,6 @@ head(van_tree_wAge)
     ## #   on_street_block <dbl>, on_street <chr>, neighbourhood_name <chr>,
     ## #   street_side_name <chr>, height_range_id <dbl>, diameter <dbl>, curb <chr>,
     ## #   longitude <dbl>, latitude <dbl>
-
-I’ve been extracting the age of trees in many different ways for various
-tasks so far, like using `substring()` and `as.numeric()`, and none of
-them was this clean in terms of coding and reading. The
-`lubridate::year()` extracts the year from a date format and turns it to
-a numeric value, all things we wanted in a single function! We need the
-age of trees in order to investigate their relationship with the
-diameter for the next Modeling exercise.
 
 <!----------------------------------------------------------------------------->
 
@@ -292,18 +294,21 @@ print(diameter_age_model)
     ## (Intercept)          age  
     ##      0.9052       0.2802
 
-The estimated coefficient for the age variable is 0.2802, which
-positive. So, overall there is a positive correlation between the
-diameter and age.
+The estimated coefficient for the age variable is 0.2802, which is
+positive. So overall, there is a positive correlation between the
+diameter and age among all trees.
 
 Now let’s see how this relationship changes for the top 3 types of
-trees— the larger the coefficient value, the stronger relation between
-age and diameter for that specific type of tree.
+trees— the larger the coefficient value for age, the stronger relation
+between age and diameter for that specific type of tree.
 
 ``` r
+# SOURCE: https://stackoverflow.com/questions/1169539/linear-regression-and-group-by-in-r
 models <- age_diamtr %>%
+  # Filtering top 3 genes with most recorded trees in the dataset
   filter(genus_name %in% top_genus$genus_name) %>%
   group_by(genus_name) %>%
+  # Fitting a linear model to each type of tree
   do(model = lm(diameter ~ age, data = .))
 
 print(models$genus_name)
@@ -368,6 +373,7 @@ Y, or a single value like a regression coefficient or a p-value.
 I am looking for the estimated coefficient for the age variable.
 
 ``` r
+# Summary of the model
 broom::tidy(diameter_age_model)
 ```
 
@@ -403,6 +409,8 @@ function.
 
 <!-------------------------- Start your work below ---------------------------->
 
+One of the summarizing tables from milestone 2:
+
 ``` r
 num_tr_nghbr <- vancouver_trees %>%
   # creating a variable year when trees are planted
@@ -429,6 +437,9 @@ head(num_tr_nghbr)
     ## 5 DOWNTOWN           2016            29
     ## 6 DOWNTOWN           2017            42
 
+Writing the table into a csv file in the `Output` folder with using
+`here:here()` function.
+
 ``` r
 write_csv(num_tr_nghbr, here::here("Output", "num_tree_nghbr.csv"))
 ```
@@ -447,8 +458,11 @@ folder. Use the functions `saveRDS()` and `readRDS()`.
 <!-------------------------- Start your work below ---------------------------->
 
 ``` r
+# Saving the rds file in the Output folder
 saveRDS(diameter_age_model, here::here("Output", "diameter_age_model.rds"))
+# Loading it again
 loaded_model <- readRDS(here::here("Output", "diameter_age_model.rds"))
+# Just make sure everything works smoothly
 print(loaded_model)
 ```
 
@@ -459,6 +473,8 @@ print(loaded_model)
     ## Coefficients:
     ## (Intercept)          age  
     ##      0.9052       0.2802
+
+Yeah! it’s the same model.
 
 <!----------------------------------------------------------------------------->
 
