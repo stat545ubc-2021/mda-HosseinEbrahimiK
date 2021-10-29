@@ -22,7 +22,7 @@ This is an individual mini data analysis project for UBC course *[STAT 545A](htt
  ### Milestone Folders
  Files are separated into three folders based on the corresponding milestone. In each milestone folder, you can find below files:
 1. *Github markdown (.md)*: [Milestone 1](/Milestone%201/MD1-M1.md), [Milestone 2](/Milestone%202/MDA-M2.md), [Milestone 3](/Milestone%203/mini-project-3.md)
-2. *R markdown file (.rmd)*: [Milestone 1](/Milestone%201/MD1-M1.Rmd), [Milestone 2](/Milestone%202/MDA-M2.Rmd), [Milestone 3](/Milestone%203/mini-project-3.rmd)
+2. *R markdown file (.rmd)*: [Milestone 1](/Milestone%201/MD1-M1.Rmd), [Milestone 2](/Milestone%202/MDA-M2.Rmd), [Milestone 3](/Milestone%203/mini-project-3.Rmd)
 3. *Figure files*: Each Milestone file contains a folder to save plots produced by the `.rmd` file to render them in the GitHub `.md` file
 
 
