@@ -416,6 +416,21 @@ function.
 
 <!-------------------------- Start your work below ---------------------------->
 
+First, let’s make sure we are in the current spot with the `here:here()`
+function.
+
+``` r
+here::here()
+```
+
+    ## [1] "/Users/joliaserm/Desktop/UBC/Fall 2021/STAT545/mda-HosseinEbrahimiK"
+
+Awesome! Now let’s make the `Output` folder:
+
+``` r
+dir.create(here::here("Output"))
+```
+
 One of the summarizing tables from milestone 2:
 
 ``` r
@@ -445,7 +460,7 @@ head(num_tr_nghbr)
     ## 6 DOWNTOWN           2017            42
 
 Writing the table into a csv file in the `Output` folder with using
-`here:here()` function.
+`here:here()` and `write_csv()` functions.
 
 ``` r
 write_csv(num_tr_nghbr, here::here("Output", "num_tree_nghbr.csv"))
@@ -464,12 +479,19 @@ folder. Use the functions `saveRDS()` and `readRDS()`.
 
 <!-------------------------- Start your work below ---------------------------->
 
+Saving the `rds` file in the Output folder with the `saveRDS()`
+function.
+
 ``` r
-# Saving the rds file in the Output folder
 saveRDS(diameter_age_model, here::here("Output", "diameter_age_model.rds"))
-# Loading it again
+```
+
+Loading it back again with `loadRDS()` and making sure everything works
+smoothly by printing the model.
+
+``` r
 loaded_model <- readRDS(here::here("Output", "diameter_age_model.rds"))
-# Just make sure everything works smoothly
+# printing the loaded model
 print(loaded_model)
 ```
 
