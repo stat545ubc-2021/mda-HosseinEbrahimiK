@@ -1,0 +1,1 @@
+This folder contains the source files for Milestone 3, UBC STAT545A Winter Term 2021. To see details about the files and how to execute the R markdown file (.rmd), Please refer to the main README file.
